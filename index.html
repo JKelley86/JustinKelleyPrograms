@@ -859,6 +859,64 @@ const TOOLS = [
       "Settings saved between sessions",
       "Delkor branded UI",
     ]
+  },
+  {
+    id: "plc-monitor",
+    icon: "P",
+    name: "PLC Monitor",
+    tagline: "Live machine status, recipe tracking & fault log",
+    desc: "A browser-based dashboard that connects to any Allen-Bradley PLC via pylogix. Tracks recipe runtime and downtime, counts parts, logs faults and state changes in real time, and lets you configure all tags without touching the code.",
+    tags: ["PLC", "Dashboard", "Allen-Bradley"],
+    version: "v1.0",
+    files: [
+      { label: "Download PLC Monitor.exe", primary: true, href: "PLC Monitor.exe" },
+      { label: "Download Source (.py)", primary: false, href: "#" },
+    ],
+    requirements: [
+      "Windows 10 or 11",
+      "No Python required (EXE)",
+      "Network access to PLC",
+      "Allen-Bradley / Rockwell PLC (pylogix compatible)",
+    ],
+    warning: {
+      title: "Windows SmartScreen",
+      body: "On first run Windows may show a security warning. Click \"More info\" then \"Run anyway\". This only happens once per machine."
+    },
+    steps: [
+      {
+        title: "Download and run",
+        body: "Download <code>PLC Monitor.exe</code> and double-click it. The app opens a browser window automatically at <code>127.0.0.1:5001</code>. A <code>config.json</code> file is created next to the EXE on first run.",
+        note: "The terminal window in the background is normal — it runs the local web server. Don\'t close it while using the app."
+      },
+      {
+        title: "Open Settings",
+        body: "Click the <strong>⚙</strong> gear icon in the top right. Enter your PLC IP address and all relevant tag names. Leave any unused tags blank."
+      },
+      {
+        title: "Configure your tags",
+        body: "Enter your PLC tags for: Recipe Name, Started, Stopped, Total Count, Fault Number, Fault String, and Clock. The recipe tag should include the array index, e.g. <code>Product_RCP[0].Header.Recipe_Name</code> — the app will automatically scan indices 0–20."
+      },
+      {
+        title: "Save & Reconnect",
+        body: "Click <strong>Save & Reconnect</strong>. The app reconnects to the PLC, scans for recipes, and begins live polling. Tags are saved to <code>config.json</code> and remembered on next launch."
+      },
+      {
+        title: "Monitor your machine",
+        body: "The dashboard shows live machine status (Running / Stopped / Faulted), per-recipe runtime and downtime bars with efficiency scores, total part counts, and a scrolling event and fault log."
+      },
+    ],
+    features: [
+      "Live Running / Stopped / Faulted status indicator",
+      "Per-recipe runtime and downtime tracking",
+      "Visual efficiency bars per recipe",
+      "Total parts counter per recipe",
+      "Scrolling fault and event log (last 50 events)",
+      "Auto-scans recipe tag indices 0–20",
+      "Handles Rockwell SINT array String_32 encoding",
+      "All tags configurable via settings panel — no code changes needed",
+      "Config saved to JSON and auto-loaded on next launch",
+      "Browser-based UI — works on any device on the same network",
+    ]
   }
 ];
 
