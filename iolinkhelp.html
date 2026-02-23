@@ -18,9 +18,6 @@
     --info: #4a9eff;
     --text: #e6edf3;
     --text-dim: #8b949e;
-    --port-in: #1a3a4a;
-    --port-out: #2a1a3a;
-    --port-iol: #1a3a1a;
     --power-color: #ff6b35;
     --eth-color: #4a9eff;
     --mono: 'Share Tech Mono', monospace;
@@ -34,567 +31,279 @@
     color: var(--text);
     font-family: var(--sans);
     min-height: 100vh;
-    overflow-x: hidden;
   }
 
-  /* Grid background */
   body::before {
     content: '';
-    position: fixed;
-    inset: 0;
+    position: fixed; inset: 0;
     background-image:
       linear-gradient(rgba(240,165,0,0.03) 1px, transparent 1px),
       linear-gradient(90deg, rgba(240,165,0,0.03) 1px, transparent 1px);
     background-size: 40px 40px;
-    pointer-events: none;
-    z-index: 0;
+    pointer-events: none; z-index: 0;
   }
 
   #app { position: relative; z-index: 1; }
 
-  /* HEADER */
   header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px 32px;
-    background: var(--surface);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 28px; background: var(--surface);
     border-bottom: 2px solid var(--accent);
-    gap: 16px;
-    flex-wrap: wrap;
+    gap: 16px; flex-wrap: wrap;
+    position: sticky; top: 0; z-index: 100;
   }
 
-  .header-brand {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
+  .header-brand { display: flex; align-items: center; gap: 12px; }
 
   .logo-mark {
-    width: 36px;
-    height: 36px;
-    background: var(--accent);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--mono);
-    font-weight: bold;
-    color: #000;
-    font-size: 14px;
+    width: 36px; height: 36px; background: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-weight: bold; color: #000; font-size: 13px;
     clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
   }
 
-  header h1 {
-    font-family: var(--mono);
-    font-size: 18px;
-    color: var(--accent);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-  }
+  header h1 { font-family: var(--mono); font-size: 17px; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; }
+  header p  { font-size: 11px; color: var(--text-dim); letter-spacing: 1px; text-transform: uppercase; }
 
-  header p {
-    font-size: 12px;
-    color: var(--text-dim);
-    letter-spacing: 1px;
-    text-transform: uppercase;
-  }
-
-  .header-controls {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    flex-wrap: wrap;
-  }
+  .header-controls { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 
   .btn {
-    font-family: var(--mono);
-    font-size: 12px;
-    padding: 8px 16px;
-    border: 1px solid var(--border);
-    background: var(--surface2);
-    color: var(--text);
-    cursor: pointer;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    transition: all 0.15s;
-    clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
+    font-family: var(--mono); font-size: 11px; padding: 7px 14px;
+    border: 1px solid var(--border); background: var(--surface2); color: var(--text);
+    cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: all 0.15s;
+    clip-path: polygon(0 0, calc(100% - 5px) 0, 100% 5px, 100% 100%, 5px 100%, 0 calc(100% - 5px));
   }
-
   .btn:hover { background: var(--border); }
   .btn.primary { border-color: var(--accent); color: var(--accent); }
   .btn.primary:hover { background: rgba(240,165,0,0.15); }
-  .btn.danger { border-color: var(--danger); color: var(--danger); }
-  .btn.danger:hover { background: rgba(255,71,87,0.15); }
 
-  /* MAIN LAYOUT */
-  main {
-    padding: 32px;
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
-  }
+  main { padding: 24px 28px; display: flex; flex-direction: column; gap: 20px; }
 
-  /* PANEL SOURCE SECTION */
-  .source-bar {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-left: 4px solid var(--accent);
-    padding: 16px 24px;
-    display: flex;
+  /* LEGEND */
+  .legend {
+    display: flex; gap: 18px; flex-wrap: wrap;
+    padding: 11px 18px; background: var(--surface); border: 1px solid var(--border);
     align-items: center;
-    gap: 24px;
-    flex-wrap: wrap;
+  }
+  .legend-title { font-family: var(--mono); font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-family: var(--mono); font-size: 10px; color: var(--text-dim); }
+  .legend-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .legend-dash { width: 20px; height: 0; border-top: 2px dashed; flex-shrink: 0; }
+
+  /* FLOW AREA */
+  .flow-area {
+    display: flex; align-items: flex-start; gap: 0;
+    overflow-x: auto; padding-bottom: 20px; padding-top: 4px;
+    min-height: 300px;
   }
 
-  .source-bar label {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    letter-spacing: 1px;
+  /* PANEL BLOCK */
+  .panel-block {
+    background: var(--surface); border: 1px solid var(--accent);
+    border-left: 4px solid var(--accent);
+    padding: 14px 14px; min-width: 110px; flex-shrink: 0;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .panel-block-title {
+    font-family: var(--mono); font-size: 9px; color: var(--text-dim);
+    text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;
+  }
+  .panel-src-row { display: flex; flex-direction: column; gap: 2px; margin-bottom: 8px; }
+  .panel-src-sublabel { font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: 1px; }
+  .panel-src-sublabel.pwr { color: var(--power-color); }
+  .panel-src-sublabel.eth { color: var(--eth-color); }
+  .panel-source-name {
+    font-family: var(--mono); font-size: 13px; color: var(--accent); font-weight: 700;
+    cursor: pointer; border-bottom: 1px dashed transparent; transition: border-color 0.15s; display: inline-block;
+  }
+  .panel-source-name:hover { border-color: var(--accent); }
+  .panel-eth-name {
+    font-family: var(--mono); font-size: 13px; color: var(--eth-color); font-weight: 700;
+    cursor: pointer; border-bottom: 1px dashed transparent; transition: border-color 0.15s; display: inline-block;
+  }
+  .panel-eth-name:hover { border-color: var(--eth-color); }
+  .panel-hint { font-family: var(--mono); font-size: 8px; color: var(--text-dim); margin-top: 6px; }
+
+  /* CHAIN CONNECTOR — arrows between blocks */
+  .chain-connector {
+    display: flex; flex-direction: column; justify-content: flex-start;
+    padding-top: 68px;
+    gap: 8px; flex-shrink: 0; width: 40px; position: relative;
   }
 
-  .source-bar .source-label {
-    font-family: var(--mono);
-    font-size: 13px;
-    color: var(--accent);
-    font-weight: bold;
-    padding: 4px 12px;
-    border: 1px solid var(--accent);
-    background: rgba(240,165,0,0.1);
+  .chain-line {
+    height: 3px; width: 100%; position: relative;
   }
+  .chain-line.pwr { background: linear-gradient(90deg, var(--power-color), rgba(255,107,53,0.6)); }
+  .chain-line.eth { background: linear-gradient(90deg, var(--eth-color),   rgba(74,158,255,0.6)); }
+  .chain-line.inactive { background: var(--border); }
 
-  /* MODULES GRID */
-  .modules-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 24px;
-    align-items: flex-start;
+  /* Arrowhead at right end */
+  .chain-line::after {
+    content: ''; position: absolute; right: -1px; top: -3.5px;
+    width: 0; height: 0;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+  }
+  .chain-line.pwr::after { border-left: 8px solid var(--power-color); }
+  .chain-line.eth::after { border-left: 8px solid var(--eth-color); }
+  .chain-line.inactive::after { border-left: 8px solid var(--border); }
+
+  /* Dashed when jumpered */
+  .chain-line.jumpered {
+    background: none;
+    border-top: 3px dashed;
+    height: 0;
+    margin-top: 1.5px;
+  }
+  .chain-line.jumpered.pwr { border-color: var(--power-color); }
+  .chain-line.jumpered.eth { border-color: var(--eth-color); }
+
+  /* Jump label above connector */
+  .chain-connector .jump-label {
+    position: absolute; top: 48px; left: 0; width: 100%;
+    font-family: var(--mono); font-size: 8px; color: var(--accent);
+    text-align: center; white-space: nowrap; letter-spacing: 0;
   }
 
   /* MODULE CARD */
   .module-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    width: 340px;
-    flex-shrink: 0;
-    position: relative;
-    animation: slideIn 0.3s ease;
+    background: var(--surface); border: 1px solid var(--border);
+    width: 310px; flex-shrink: 0; position: relative;
+    animation: slideIn 0.25s ease;
   }
-
   @keyframes slideIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; transform: translateX(-8px); }
+    to   { opacity: 1; transform: translateX(0); }
   }
-
   .module-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
     background: linear-gradient(90deg, var(--accent), transparent);
   }
 
   .module-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--border);
-    background: var(--surface2);
-    gap: 8px;
+    display: flex; align-items: center; padding: 10px 12px; gap: 8px;
+    border-bottom: 1px solid var(--border); background: var(--surface2);
   }
-
-  .module-id {
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--text-dim);
-    text-transform: uppercase;
-  }
-
+  .module-id { font-family: var(--mono); font-size: 9px; color: var(--text-dim); flex-shrink: 0; }
   .module-name-input {
-    background: transparent;
-    border: none;
-    border-bottom: 1px dashed var(--border);
-    color: var(--text);
-    font-family: var(--mono);
-    font-size: 14px;
-    font-weight: 600;
-    flex: 1;
-    padding: 2px 4px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
+    background: transparent; border: none; border-bottom: 1px dashed var(--border);
+    color: var(--text); font-family: var(--mono); font-size: 12px; font-weight: 600;
+    flex: 1; padding: 2px 4px; letter-spacing: 1px; text-transform: uppercase;
   }
-
-  .module-name-input:focus {
-    outline: none;
-    border-bottom-color: var(--accent);
-    color: var(--accent);
-  }
-
+  .module-name-input:focus { outline: none; border-bottom-color: var(--accent); color: var(--accent); }
   .module-delete {
-    background: none;
-    border: none;
-    color: var(--text-dim);
-    cursor: pointer;
-    font-size: 16px;
-    padding: 2px 6px;
-    transition: color 0.15s;
+    background: none; border: none; color: var(--text-dim); cursor: pointer;
+    font-size: 13px; padding: 2px 4px; transition: color 0.15s;
   }
   .module-delete:hover { color: var(--danger); }
 
-  /* SPECIAL PORTS: Power & Ethernet */
-  .special-ports {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0;
+  /* CONN PORTS section */
+  .conn-ports {
+    display: grid; grid-template-columns: 1fr 1fr;
     border-bottom: 1px solid var(--border);
   }
-
-  .special-port {
-    padding: 8px 12px;
-    border-right: 1px solid var(--border);
-    position: relative;
+  .conn-group {
+    padding: 8px 10px; border-right: 1px solid var(--border);
+    display: flex; flex-direction: column; gap: 5px;
   }
+  .conn-group:last-child { border-right: none; }
 
-  .special-port:last-child { border-right: none; }
-
-  .special-port-label {
-    font-family: var(--mono);
-    font-size: 9px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 4px;
+  .conn-group-title {
+    font-family: var(--mono); font-size: 9px;
+    text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1px;
   }
+  .conn-group-title.pwr { color: var(--power-color); }
+  .conn-group-title.eth { color: var(--eth-color); }
 
-  .special-port.power .special-port-label { color: var(--power-color); }
-  .special-port.eth .special-port-label { color: var(--eth-color); }
+  .port-row { display: flex; align-items: center; gap: 5px; }
 
-  .special-port-name {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--text-dim);
-    cursor: pointer;
-    border-bottom: 1px dashed transparent;
-    transition: all 0.15s;
-    display: inline-block;
-    min-width: 60px;
+  .port-badge {
+    font-family: var(--mono); font-size: 8px;
+    padding: 1px 4px; border: 1px solid; text-transform: uppercase; flex-shrink: 0;
   }
+  .port-badge.p-in  { border-color: rgba(255,107,53,0.5); color: var(--power-color); background: rgba(255,107,53,0.06); }
+  .port-badge.p-out { border-color: rgba(255,107,53,0.5); color: var(--power-color); background: rgba(255,107,53,0.06); }
+  .port-badge.e-in  { border-color: rgba(74,158,255,0.5); color: var(--eth-color);   background: rgba(74,158,255,0.06); }
+  .port-badge.e-out { border-color: rgba(74,158,255,0.5); color: var(--eth-color);   background: rgba(74,158,255,0.06); }
 
-  .special-port-name:hover {
-    border-bottom-color: var(--border);
-    color: var(--text);
+  .port-name-editable {
+    font-family: var(--mono); font-size: 10px; color: var(--text-dim);
+    cursor: pointer; border-bottom: 1px dashed transparent; transition: all 0.15s;
+    flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
+  .port-name-editable:hover { border-bottom-color: var(--border); color: var(--text); }
 
-  .jumper-toggle {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-top: 4px;
+  .jumper-row { display: flex; align-items: center; gap: 5px; }
+  .jumper-chk {
+    appearance: none; width: 26px; height: 13px;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 2px; cursor: pointer; position: relative; transition: all 0.2s; flex-shrink: 0;
   }
-
-  .jumper-toggle input[type="checkbox"] {
-    appearance: none;
-    width: 28px;
-    height: 14px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    cursor: pointer;
-    position: relative;
-    transition: all 0.2s;
+  .jumper-chk:checked { background: rgba(240,165,0,0.2); border-color: var(--accent); }
+  .jumper-chk::after {
+    content: ''; position: absolute; top: 2px; left: 2px;
+    width: 7px; height: 7px; background: var(--text-dim); transition: all 0.2s;
   }
-
-  .jumper-toggle input[type="checkbox"]:checked {
-    background: rgba(240,165,0,0.3);
-    border-color: var(--accent);
+  .jumper-chk:checked::after { left: 15px; background: var(--accent); }
+  .jumper-lbl {
+    font-family: var(--mono); font-size: 8px; color: var(--text-dim); text-transform: uppercase;
   }
-
-  .jumper-toggle input[type="checkbox"]::after {
-    content: '';
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    width: 8px;
-    height: 8px;
-    background: var(--text-dim);
-    transition: all 0.2s;
-  }
-
-  .jumper-toggle input[type="checkbox"]:checked::after {
-    left: 16px;
-    background: var(--accent);
-  }
-
-  .jumper-label {
-    font-family: var(--mono);
-    font-size: 9px;
-    color: var(--text-dim);
-    text-transform: uppercase;
-  }
-
-  .jumper-source-select {
-    font-family: var(--mono);
-    font-size: 10px;
-    background: var(--surface2);
-    border: 1px solid var(--accent);
-    color: var(--accent);
-    padding: 2px 6px;
-    margin-top: 4px;
-    width: 100%;
-    cursor: pointer;
-  }
+  .jumper-lbl.on { color: var(--accent); }
 
   /* IO PORTS */
-  .io-ports {
-    padding: 8px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6px;
-  }
+  .io-ports { padding: 7px; display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
 
   .io-port {
-    border: 1px solid var(--border);
-    padding: 8px;
-    position: relative;
-    transition: border-color 0.15s;
-    cursor: pointer;
+    border: 1px solid var(--border); padding: 6px 7px;
+    position: relative; transition: border-color 0.15s;
   }
+  .io-port.t-input   { border-left: 3px solid var(--info); }
+  .io-port.t-output  { border-left: 3px solid var(--accent2); }
+  .io-port.t-iolink  { border-left: 3px solid var(--accent); }
 
-  .io-port:hover { border-color: var(--text-dim); }
-  .io-port.type-input { border-left: 3px solid var(--info); }
-  .io-port.type-output { border-left: 3px solid var(--accent2); }
-  .io-port.type-iolink { border-left: 3px solid var(--accent); }
-
-  .port-number {
-    font-family: var(--mono);
-    font-size: 9px;
-    color: var(--text-dim);
-    margin-bottom: 4px;
-    text-transform: uppercase;
-  }
+  .port-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+  .port-number { font-family: var(--mono); font-size: 9px; color: var(--text-dim); text-transform: uppercase; }
+  .status-dot { width: 6px; height: 6px; border-radius: 50%; }
+  .io-port.t-input  .status-dot { background: var(--info);    box-shadow: 0 0 4px var(--info); }
+  .io-port.t-output .status-dot { background: var(--accent2); box-shadow: 0 0 4px var(--accent2); }
+  .io-port.t-iolink .status-dot { background: var(--accent);  box-shadow: 0 0 4px var(--accent); }
 
   .port-type-select {
-    font-family: var(--mono);
-    font-size: 10px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 2px 4px;
-    width: 100%;
-    margin-bottom: 4px;
-    cursor: pointer;
+    font-family: var(--mono); font-size: 10px;
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--text); padding: 2px 4px; width: 100%; margin-bottom: 4px; cursor: pointer;
   }
 
+  .device-row { display: flex; align-items: center; gap: 5px; margin-bottom: 4px; }
+  .device-icon { width: 24px; height: 24px; flex-shrink: 0; }
   .port-device-select {
-    font-family: var(--mono);
-    font-size: 10px;
-    background: rgba(240,165,0,0.08);
-    border: 1px solid rgba(240,165,0,0.3);
-    color: var(--accent);
-    padding: 2px 4px;
-    width: 100%;
-    margin-bottom: 4px;
-    cursor: pointer;
+    font-family: var(--mono); font-size: 9px;
+    background: rgba(240,165,0,0.07); border: 1px solid rgba(240,165,0,0.3);
+    color: var(--accent); padding: 2px 3px; flex: 1; cursor: pointer;
   }
 
   .port-name-input {
-    font-family: var(--mono);
-    font-size: 11px;
-    background: transparent;
-    border: none;
-    border-bottom: 1px dashed var(--border);
-    color: var(--text);
-    padding: 2px 2px;
-    width: 100%;
+    font-family: var(--mono); font-size: 10px;
+    background: transparent; border: none; border-bottom: 1px dashed var(--border);
+    color: var(--text); padding: 2px; width: 100%;
   }
+  .port-name-input:focus { outline: none; border-bottom-color: var(--accent); color: var(--accent); }
+  .port-name-input::placeholder { color: var(--text-dim); font-style: italic; }
 
-  .port-name-input:focus {
-    outline: none;
-    border-bottom-color: var(--accent);
-    color: var(--accent);
+  /* Add btn at end of chain */
+  .add-module-btn {
+    display: flex; align-items: center; justify-content: center;
+    width: 44px; align-self: stretch; min-height: 100px;
+    background: var(--surface2); border: 1px dashed var(--border);
+    color: var(--text-dim); font-size: 22px; cursor: pointer;
+    flex-shrink: 0; transition: all 0.15s; margin-left: 0;
   }
-
-  .port-name-input::placeholder {
-    color: var(--text-dim);
-    font-style: italic;
-  }
-
-  /* STATUS INDICATORS */
-  .port-status {
-    position: absolute;
-    top: 6px;
-    right: 6px;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--border);
-  }
-
-  .io-port.type-input .port-status { background: var(--info); box-shadow: 0 0 4px var(--info); }
-  .io-port.type-output .port-status { background: var(--accent2); box-shadow: 0 0 4px var(--accent2); }
-  .io-port.type-iolink .port-status { background: var(--accent); box-shadow: 0 0 4px var(--accent); }
-
-  /* JUMPER ARROWS SVG OVERLAY */
-  #arrow-overlay {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100vw;
-    height: 100vh;
-    pointer-events: none;
-    z-index: 999;
-  }
-
-  /* LEGEND */
-  .legend {
-    display: flex;
-    gap: 24px;
-    flex-wrap: wrap;
-    padding: 16px 24px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    align-items: center;
-  }
-
-  .legend-title {
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-right: 8px;
-  }
-
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--text-dim);
-  }
-
-  .legend-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-
-  .legend-bar {
-    width: 20px;
-    height: 4px;
-    flex-shrink: 0;
-  }
-
-  /* MODAL */
-  .modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.7);
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .modal {
-    background: var(--surface);
-    border: 1px solid var(--accent);
-    padding: 32px;
-    min-width: 320px;
-    position: relative;
-  }
-
-  .modal h2 {
-    font-family: var(--mono);
-    font-size: 14px;
-    color: var(--accent);
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 20px;
-  }
-
-  .modal label {
-    display: block;
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 4px;
-    margin-top: 12px;
-  }
-
-  .modal input, .modal select {
-    width: 100%;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--text);
-    font-family: var(--mono);
-    font-size: 13px;
-    padding: 8px 12px;
-  }
-
-  .modal input:focus, .modal select:focus {
-    outline: none;
-    border-color: var(--accent);
-  }
-
-  .modal-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 20px;
-  }
-
-  /* Jumper arrow line styling */
-  .jumper-arrow {
-    stroke: var(--accent);
-    stroke-width: 2;
-    fill: none;
-    stroke-dasharray: 6 3;
-    marker-end: url(#arrowhead);
-    opacity: 0.8;
-  }
-
-  .jumper-arrow.eth {
-    stroke: var(--eth-color);
-    marker-end: url(#arrowhead-eth);
-  }
-
-  /* Tooltip */
-  .jumper-tooltip {
-    font-family: var(--mono);
-    font-size: 10px;
-    fill: var(--accent);
-  }
-
-  /* Scrollable canvas */
-  #canvas {
-    overflow-x: auto;
-    overflow-y: auto;
-  }
+  .add-module-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(240,165,0,0.05); }
 </style>
 </head>
 <body>
 <div id="app">
-
-  <!-- SVG Arrow Overlay -->
-  <svg id="arrow-overlay">
-    <defs>
-      <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
-        <polygon points="0 0, 8 3, 0 6" fill="#f0a500" opacity="0.9"/>
-      </marker>
-      <marker id="arrowhead-eth" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
-        <polygon points="0 0, 8 3, 0 6" fill="#4a9eff" opacity="0.9"/>
-      </marker>
-      <filter id="glow">
-        <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
-        <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
-      </filter>
-    </defs>
-  </svg>
-
   <header>
     <div class="header-brand">
       <div class="logo-mark">IOL</div>
@@ -611,32 +320,17 @@
   </header>
 
   <main>
-
-    <!-- Legend -->
     <div class="legend">
       <span class="legend-title">Legend:</span>
-      <span class="legend-item"><span class="legend-dot" style="background:#4a9eff;box-shadow:0 0 4px #4a9eff"></span> Input</span>
-      <span class="legend-item"><span class="legend-dot" style="background:#00d4aa;box-shadow:0 0 4px #00d4aa"></span> Output</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#4a9eff;box-shadow:0 0 4px #4a9eff"></span> Input Port</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#00d4aa;box-shadow:0 0 4px #00d4aa"></span> Output Port</span>
       <span class="legend-item"><span class="legend-dot" style="background:#f0a500;box-shadow:0 0 4px #f0a500"></span> IO-Link Device</span>
-      <span class="legend-item"><span class="legend-bar" style="background:#f0a500;opacity:0.7"></span> Power Jumper</span>
-      <span class="legend-item"><span class="legend-bar" style="background:#4a9eff;opacity:0.7"></span> Ethernet Jumper</span>
-      <span class="legend-item" style="margin-left:auto;">
-        <span style="font-size:11px;color:var(--text-dim);">Click port names to rename • Toggle jumpers below power/eth ports</span>
-      </span>
+      <span class="legend-item"><span class="legend-dash" style="border-color:#ff6b35"></span>Power flow (Port 1 → Port 2)</span>
+      <span class="legend-item"><span class="legend-dash" style="border-color:#4a9eff"></span>Ethernet flow (Port 1 → Port 2)</span>
+      <span class="legend-item" style="margin-left:auto;font-size:10px;color:var(--text-dim);">Port 1 = IN from previous &nbsp;|&nbsp; Port 2 = OUT to next (enable jumper) &nbsp;|&nbsp; Click any name to rename</span>
     </div>
 
-    <!-- Panel Power Source Bar -->
-    <div class="source-bar">
-      <label>Network Power Source:</label>
-      <span class="source-label" id="panel-source-label">PANEL</span>
-      <label style="margin-left:16px;">Panel Eth Source:</label>
-      <span class="source-label" style="border-color:var(--eth-color);color:var(--eth-color);background:rgba(74,158,255,0.1);" id="panel-eth-label">SWITCH</span>
-      <button class="btn" style="margin-left:auto;" onclick="editPanelSources()">Edit Sources</button>
-    </div>
-
-    <!-- Modules -->
-    <div class="modules-grid" id="modules-grid"></div>
-
+    <div class="flow-area" id="flow-area"></div>
   </main>
 </div>
 
@@ -644,45 +338,151 @@
 let modules = [];
 let moduleIdCounter = 0;
 
+const DEVICE_ICONS = {
+  'None': `<svg viewBox="0 0 24 24" fill="none" stroke="#8b949e" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="12" cy="12" r="9"/><line x1="9" y1="12" x2="15" y2="12"/>
+  </svg>`,
+
+  'Touch Button Light': `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="12" cy="9" r="5" fill="rgba(240,165,0,0.12)" stroke="#f0a500" stroke-width="1.5"/>
+    <circle cx="12" cy="9" r="2.5" fill="#f0a500"/>
+    <path d="M9 16 Q12 13.5 15 16" stroke="#f0a500" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <line x1="12" y1="14" x2="12" y2="16" stroke="#f0a500" stroke-width="1.5"/>
+    <line x1="9.5" y1="19" x2="14.5" y2="19" stroke="#f0a500" stroke-width="1.5" stroke-linecap="round"/>
+  </svg>`,
+
+  'Rail & Status Light': `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="2" y="9" width="20" height="7" rx="1.5" fill="rgba(0,212,170,0.08)" stroke="#00d4aa" stroke-width="1.2"/>
+    <circle cx="6.5"  cy="12.5" r="2" fill="#00d4aa"/>
+    <circle cx="12"   cy="12.5" r="2" fill="#f0a500"/>
+    <circle cx="17.5" cy="12.5" r="2" fill="#ff4757"/>
+    <line x1="2" y1="7" x2="22" y2="7"   stroke="#00d4aa" stroke-width="1.8" stroke-linecap="round"/>
+    <line x1="2" y1="18" x2="22" y2="18" stroke="#00d4aa" stroke-width="1.8" stroke-linecap="round"/>
+  </svg>`,
+
+  'RFID Sensor': `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="8" y="8" width="8" height="8" rx="1.5" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" stroke-width="1.2"/>
+    <circle cx="12" cy="12" r="1.8" fill="#4a9eff"/>
+    <path d="M5.5 7.5 Q5.5 3 12 3 Q18.5 3 18.5 7.5" stroke="#4a9eff" stroke-width="1.2" fill="none" opacity="0.5"/>
+    <path d="M5.5 16.5 Q5.5 21 12 21 Q18.5 21 18.5 16.5" stroke="#4a9eff" stroke-width="1.2" fill="none" opacity="0.5"/>
+    <path d="M3 10 Q3 5.5 12 5.5 Q21 5.5 21 10" stroke="#4a9eff" stroke-width="1" fill="none" opacity="0.3" stroke-dasharray="2 1.5"/>
+    <path d="M3 14 Q3 18.5 12 18.5 Q21 18.5 21 14" stroke="#4a9eff" stroke-width="1" fill="none" opacity="0.3" stroke-dasharray="2 1.5"/>
+  </svg>`
+};
+
 const DEVICE_TYPES = ['None', 'Touch Button Light', 'Rail & Status Light', 'RFID Sensor'];
-const PORT_TYPES = ['Input', 'Output', 'IO-Link'];
+const PORT_TYPES   = ['Input', 'Output', 'IO-Link'];
 
 function createModule() {
   moduleIdCounter++;
-  const id = moduleIdCounter;
-  const ports = Array.from({length: 8}, (_, i) => ({
-    number: i + 1,
-    type: 'Input',
-    device: 'None',
-    name: ''
-  }));
-
   return {
-    id,
-    name: `Module ${id}`,
-    power1: { name: 'PWR-1', jumpered: false, jumpSource: '' },
-    power2: { name: 'PWR-2', jumpered: false, jumpSource: '' },
-    eth1: { name: 'ETH-1', jumpered: false, jumpSource: '' },
-    eth2: { name: 'ETH-2', jumpered: false, jumpSource: '' },
-    ports
+    id: moduleIdCounter,
+    name: `Module ${moduleIdCounter}`,
+    pwr1Name: 'PWR IN',   // Port 1 — power input
+    pwr2Name: 'PWR OUT',  // Port 2 — power output (jumper to next)
+    pwr2Jumpered: false,
+    eth1Name: 'ETH IN',   // Port 1 — eth input
+    eth2Name: 'ETH OUT',  // Port 2 — eth output (jumper to next)
+    eth2Jumpered: false,
+    ports: Array.from({length: 8}, (_, i) => ({
+      number: i + 1,
+      type: 'Input',
+      device: 'None',
+      name: ''
+    }))
   };
 }
 
-function getAllModuleNames() {
-  return ['PANEL', ...modules.map(m => m.name)];
-}
-
 function renderAll() {
-  renderModules();
-  setTimeout(drawArrows, 100);
+  const area = document.getElementById('flow-area');
+  area.innerHTML = '';
+
+  area.appendChild(buildPanelBlock());
+
+  modules.forEach((mod, idx) => {
+    // Connector: look at PREVIOUS module's jumper state (or always connected from panel)
+    const prevJumpedPwr = idx === 0 ? true : modules[idx - 1].pwr2Jumpered;
+    const prevJumpedEth = idx === 0 ? true : modules[idx - 1].eth2Jumpered;
+    area.appendChild(buildConnector(prevJumpedPwr, prevJumpedEth));
+    area.appendChild(buildModuleCard(mod));
+  });
+
+  const addBtn = document.createElement('div');
+  addBtn.className = 'add-module-btn';
+  addBtn.title = 'Add module';
+  addBtn.textContent = '+';
+  addBtn.onclick = addModule;
+  area.appendChild(addBtn);
 }
 
-function renderModules() {
-  const grid = document.getElementById('modules-grid');
-  grid.innerHTML = '';
-  modules.forEach(mod => {
-    grid.appendChild(buildModuleCard(mod));
-  });
+function buildPanelBlock() {
+  const div = document.createElement('div');
+  div.className = 'panel-block';
+
+  const title = document.createElement('div');
+  title.className = 'panel-block-title';
+  title.textContent = 'Network Source';
+  div.appendChild(title);
+
+  // Power source
+  const pwrRow = document.createElement('div');
+  pwrRow.className = 'panel-src-row';
+  const pwrLbl = document.createElement('div');
+  pwrLbl.className = 'panel-src-sublabel pwr';
+  pwrLbl.textContent = '⚡ Power';
+  const pwrName = document.createElement('div');
+  pwrName.className = 'panel-source-name';
+  pwrName.id = 'panel-pwr-name';
+  pwrName.textContent = 'PANEL';
+  pwrName.title = 'Click to rename';
+  pwrName.onclick = () => {
+    const n = prompt('Rename power source:', pwrName.textContent);
+    if (n?.trim()) pwrName.textContent = n.trim().toUpperCase();
+  };
+  pwrRow.appendChild(pwrLbl);
+  pwrRow.appendChild(pwrName);
+  div.appendChild(pwrRow);
+
+  // Ethernet source
+  const ethRow = document.createElement('div');
+  ethRow.className = 'panel-src-row';
+  const ethLbl = document.createElement('div');
+  ethLbl.className = 'panel-src-sublabel eth';
+  ethLbl.textContent = '⬡ Ethernet';
+  const ethName = document.createElement('div');
+  ethName.className = 'panel-eth-name';
+  ethName.id = 'panel-eth-name';
+  ethName.textContent = 'SWITCH';
+  ethName.title = 'Click to rename';
+  ethName.onclick = () => {
+    const n = prompt('Rename ethernet source:', ethName.textContent);
+    if (n?.trim()) ethName.textContent = n.trim().toUpperCase();
+  };
+  ethRow.appendChild(ethLbl);
+  ethRow.appendChild(ethName);
+  div.appendChild(ethRow);
+
+  const hint = document.createElement('div');
+  hint.className = 'panel-hint';
+  hint.textContent = 'Click name to rename';
+  div.appendChild(hint);
+
+  return div;
+}
+
+function buildConnector(pwrActive, ethActive) {
+  const wrap = document.createElement('div');
+  wrap.className = 'chain-connector';
+
+  const pwrLine = document.createElement('div');
+  pwrLine.className = `chain-line pwr${pwrActive ? '' : ' inactive'}`;
+
+  const ethLine = document.createElement('div');
+  ethLine.className = `chain-line eth${ethActive ? '' : ' inactive'}`;
+
+  wrap.appendChild(pwrLine);
+  wrap.appendChild(ethLine);
+  return wrap;
 }
 
 function buildModuleCard(mod) {
@@ -691,252 +491,184 @@ function buildModuleCard(mod) {
   card.dataset.modId = mod.id;
 
   // Header
-  const header = document.createElement('div');
-  header.className = 'module-header';
-
+  const hdr = document.createElement('div');
+  hdr.className = 'module-header';
   const idSpan = document.createElement('span');
   idSpan.className = 'module-id';
   idSpan.textContent = `#${mod.id}`;
-
-  const nameInput = document.createElement('input');
-  nameInput.className = 'module-name-input';
-  nameInput.value = mod.name;
-  nameInput.addEventListener('input', e => { mod.name = e.target.value; setTimeout(drawArrows, 50); });
-
+  const nameInp = document.createElement('input');
+  nameInp.className = 'module-name-input';
+  nameInp.value = mod.name;
+  nameInp.oninput = e => { mod.name = e.target.value; };
   const delBtn = document.createElement('button');
   delBtn.className = 'module-delete';
   delBtn.innerHTML = '✕';
-  delBtn.title = 'Delete module';
   delBtn.onclick = () => { modules = modules.filter(m => m.id !== mod.id); renderAll(); };
+  hdr.appendChild(idSpan);
+  hdr.appendChild(nameInp);
+  hdr.appendChild(delBtn);
+  card.appendChild(hdr);
 
-  header.appendChild(idSpan);
-  header.appendChild(nameInput);
-  header.appendChild(delBtn);
-  card.appendChild(header);
-
-  // Special ports (2 power + 2 eth)
-  const specialPorts = document.createElement('div');
-  specialPorts.className = 'special-ports';
-
-  const specialDefs = [
-    { key: 'power1', label: 'POWER PORT 1', cls: 'power', color: 'power-color' },
-    { key: 'power2', label: 'POWER PORT 2', cls: 'power', color: 'power-color' },
-    { key: 'eth1', label: 'ETHERNET 1', cls: 'eth', color: 'eth-color' },
-    { key: 'eth2', label: 'ETHERNET 2', cls: 'eth', color: 'eth-color' },
-  ];
-
-  specialDefs.forEach(def => {
-    const portData = mod[def.key];
-    const sp = document.createElement('div');
-    sp.className = `special-port ${def.cls}`;
-    sp.dataset.portKey = def.key;
-    sp.dataset.modId = mod.id;
-
-    const label = document.createElement('div');
-    label.className = 'special-port-label';
-    label.textContent = def.label;
-
-    const nameEl = document.createElement('span');
-    nameEl.className = 'special-port-name';
-    nameEl.textContent = portData.name;
-    nameEl.title = 'Click to rename';
-    nameEl.onclick = () => {
-      const newName = prompt('Rename port:', portData.name);
-      if (newName !== null && newName.trim()) {
-        portData.name = newName.trim();
-        renderAll();
-      }
-    };
-
-    const jumperToggle = document.createElement('div');
-    jumperToggle.className = 'jumper-toggle';
-
-    const chk = document.createElement('input');
-    chk.type = 'checkbox';
-    chk.checked = portData.jumpered;
-    chk.onchange = e => {
-      portData.jumpered = e.target.checked;
-      if (!e.target.checked) portData.jumpSource = '';
-      renderAll();
-    };
-
-    const jLabel = document.createElement('span');
-    jLabel.className = 'jumper-label';
-    jLabel.textContent = 'JUMPERED';
-
-    jumperToggle.appendChild(chk);
-    jumperToggle.appendChild(jLabel);
-
-    sp.appendChild(label);
-    sp.appendChild(nameEl);
-    sp.appendChild(jumperToggle);
-
-    if (portData.jumpered) {
-      const sourceSelect = document.createElement('select');
-      sourceSelect.className = 'jumper-source-select';
-      const sources = getAllModuleNames().filter(n => n !== mod.name);
-      sources.forEach(s => {
-        const opt = document.createElement('option');
-        opt.value = s;
-        opt.textContent = s;
-        if (s === portData.jumpSource) opt.selected = true;
-        sourceSelect.appendChild(opt);
-      });
-      if (!portData.jumpSource && sources.length) portData.jumpSource = sources[0];
-      sourceSelect.onchange = e => { portData.jumpSource = e.target.value; drawArrows(); };
-      sp.appendChild(sourceSelect);
-    }
-
-    specialPorts.appendChild(sp);
-  });
-
-  // Only show first 4 in a 2x2 grid... actually show all 4
-  card.appendChild(specialPorts);
+  // Connection ports
+  const connPorts = document.createElement('div');
+  connPorts.className = 'conn-ports';
+  connPorts.appendChild(buildConnGroup(mod, 'pwr'));
+  connPorts.appendChild(buildConnGroup(mod, 'eth'));
+  card.appendChild(connPorts);
 
   // IO Ports
   const ioSection = document.createElement('div');
   ioSection.className = 'io-ports';
-
-  mod.ports.forEach((port, idx) => {
-    const portDiv = document.createElement('div');
-    portDiv.className = `io-port type-${port.type.toLowerCase().replace('-', '')}`;
-
-    const statusDot = document.createElement('div');
-    statusDot.className = 'port-status';
-
-    const numDiv = document.createElement('div');
-    numDiv.className = 'port-number';
-    numDiv.textContent = `PORT ${port.number}`;
-
-    const typeSelect = document.createElement('select');
-    typeSelect.className = 'port-type-select';
-    PORT_TYPES.forEach(t => {
-      const opt = document.createElement('option');
-      opt.value = t;
-      opt.textContent = t;
-      if (t === port.type) opt.selected = true;
-      typeSelect.appendChild(opt);
-    });
-    typeSelect.onchange = e => {
-      port.type = e.target.value;
-      if (port.type !== 'IO-Link') port.device = 'None';
-      portDiv.className = `io-port type-${port.type.replace('-','').replace('IO','IO').toLowerCase()}`;
-      renderAll();
-    };
-
-    portDiv.appendChild(statusDot);
-    portDiv.appendChild(numDiv);
-    portDiv.appendChild(typeSelect);
-
-    if (port.type === 'IO-Link') {
-      const devSelect = document.createElement('select');
-      devSelect.className = 'port-device-select';
-      DEVICE_TYPES.forEach(d => {
-        const opt = document.createElement('option');
-        opt.value = d;
-        opt.textContent = d;
-        if (d === port.device) opt.selected = true;
-        devSelect.appendChild(opt);
-      });
-      devSelect.onchange = e => { port.device = e.target.value; renderAll(); };
-      portDiv.appendChild(devSelect);
-    }
-
-    const nameInput = document.createElement('input');
-    nameInput.className = 'port-name-input';
-    nameInput.placeholder = port.type === 'IO-Link' ? 'Label device...' : 'Label port...';
-    nameInput.value = port.name;
-    nameInput.oninput = e => { port.name = e.target.value; };
-    portDiv.appendChild(nameInput);
-
-    ioSection.appendChild(portDiv);
-  });
-
+  mod.ports.forEach(port => ioSection.appendChild(buildIOPort(port)));
   card.appendChild(ioSection);
 
   return card;
 }
 
-function drawArrows() {
-  const svg = document.getElementById('arrow-overlay');
-  // Remove old arrows
-  svg.querySelectorAll('.jumper-arrow, .jumper-label-text').forEach(el => el.remove());
+function buildConnGroup(mod, type) {
+  const isPwr = type === 'pwr';
+  const group = document.createElement('div');
+  group.className = 'conn-group';
 
-  modules.forEach(mod => {
-    const cardEl = document.querySelector(`[data-mod-id="${mod.id}"]`);
-    if (!cardEl) return;
+  const title = document.createElement('div');
+  title.className = `conn-group-title ${type}`;
+  title.textContent = isPwr ? '⚡ Power' : '⬡ Ethernet';
+  group.appendChild(title);
 
-    const specialDefs = ['power1', 'power2', 'eth1', 'eth2'];
-    specialDefs.forEach(key => {
-      const portData = mod[key];
-      if (!portData.jumpered || !portData.jumpSource) return;
+  // Port 1 — IN
+  {
+    const row = document.createElement('div');
+    row.className = 'port-row';
+    const badge = document.createElement('span');
+    badge.className = `port-badge ${isPwr ? 'p-in' : 'e-in'}`;
+    badge.textContent = 'P1 IN';
+    const nameKey = isPwr ? 'pwr1Name' : 'eth1Name';
+    const nameEl = document.createElement('span');
+    nameEl.className = 'port-name-editable';
+    nameEl.textContent = mod[nameKey];
+    nameEl.title = 'Click to rename';
+    nameEl.onclick = () => {
+      const n = prompt('Rename port:', mod[nameKey]);
+      if (n?.trim()) { mod[nameKey] = n.trim(); renderAll(); }
+    };
+    row.appendChild(badge);
+    row.appendChild(nameEl);
+    group.appendChild(row);
+  }
 
-      const portEl = cardEl.querySelector(`[data-port-key="${key}"]`);
-      if (!portEl) return;
+  // Port 2 — OUT
+  {
+    const row = document.createElement('div');
+    row.className = 'port-row';
+    const badge = document.createElement('span');
+    badge.className = `port-badge ${isPwr ? 'p-out' : 'e-out'}`;
+    badge.textContent = 'P2 OUT';
+    const nameKey = isPwr ? 'pwr2Name' : 'eth2Name';
+    const nameEl = document.createElement('span');
+    nameEl.className = 'port-name-editable';
+    nameEl.textContent = mod[nameKey];
+    nameEl.title = 'Click to rename';
+    nameEl.onclick = () => {
+      const n = prompt('Rename port:', mod[nameKey]);
+      if (n?.trim()) { mod[nameKey] = n.trim(); renderAll(); }
+    };
+    row.appendChild(badge);
+    row.appendChild(nameEl);
+    group.appendChild(row);
+  }
 
-      const toRect = portEl.getBoundingClientRect();
-      const toX = toRect.left + toRect.width / 2;
-      const toY = toRect.top + toRect.height / 2;
+  // Jumper toggle on Port 2
+  const jumperKey = isPwr ? 'pwr2Jumpered' : 'eth2Jumpered';
+  const jRow = document.createElement('div');
+  jRow.className = 'jumper-row';
+  const chk = document.createElement('input');
+  chk.type = 'checkbox';
+  chk.className = 'jumper-chk';
+  chk.checked = mod[jumperKey];
+  chk.onchange = e => { mod[jumperKey] = e.target.checked; renderAll(); };
+  const jLbl = document.createElement('span');
+  jLbl.className = `jumper-lbl${mod[jumperKey] ? ' on' : ''}`;
+  jLbl.textContent = mod[jumperKey] ? '↗ JUMPER ON' : 'JUMPER OFF';
+  jRow.appendChild(chk);
+  jRow.appendChild(jLbl);
+  group.appendChild(jRow);
 
-      let fromX, fromY;
-      const isEth = key.startsWith('eth');
+  return group;
+}
 
-      if (portData.jumpSource === 'PANEL') {
-        fromX = 60;
-        fromY = 200;
-      } else {
-        // Find source module card
-        const srcMod = modules.find(m => m.name === portData.jumpSource);
-        if (srcMod) {
-          const srcCard = document.querySelector(`[data-mod-id="${srcMod.id}"]`);
-          if (srcCard) {
-            const srcRect = srcCard.getBoundingClientRect();
-            fromX = srcRect.left + srcRect.width / 2;
-            fromY = srcRect.top + 40;
-          }
-        }
-      }
+function buildIOPort(port) {
+  const cls = port.type === 'IO-Link' ? 't-iolink' : `t-${port.type.toLowerCase()}`;
+  const div = document.createElement('div');
+  div.className = `io-port ${cls}`;
 
-      if (fromX === undefined) return;
+  const top = document.createElement('div');
+  top.className = 'port-top';
+  const num = document.createElement('span');
+  num.className = 'port-number';
+  num.textContent = `Port ${port.number}`;
+  const dot = document.createElement('div');
+  dot.className = 'status-dot';
+  top.appendChild(num);
+  top.appendChild(dot);
+  div.appendChild(top);
 
-      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-      const cx1 = fromX;
-      const cy1 = (fromY + toY) / 2 - 30;
-      const cx2 = toX;
-      const cy2 = (fromY + toY) / 2 - 30;
-      path.setAttribute('d', `M ${fromX} ${fromY} C ${cx1} ${cy1}, ${cx2} ${cy2}, ${toX} ${toY}`);
-      path.className.baseVal = isEth ? 'jumper-arrow eth' : 'jumper-arrow';
-      path.setAttribute('filter', 'url(#glow)');
-      svg.appendChild(path);
-
-      // Label on midpoint
-      const midX = (fromX + toX) / 2;
-      const midY = ((fromY + toY) / 2) - 40;
-      const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      text.setAttribute('x', midX);
-      text.setAttribute('y', midY);
-      text.setAttribute('text-anchor', 'middle');
-      text.className.baseVal = 'jumper-label-text';
-      text.style.fontFamily = "'Share Tech Mono', monospace";
-      text.style.fontSize = '10px';
-      text.style.fill = isEth ? '#4a9eff' : '#f0a500';
-      text.textContent = `${portData.jumpSource} → ${portData.name}`;
-      svg.appendChild(text);
-    });
+  const typeSelect = document.createElement('select');
+  typeSelect.className = 'port-type-select';
+  PORT_TYPES.forEach(t => {
+    const opt = document.createElement('option');
+    opt.value = t;
+    opt.textContent = t;
+    if (t === port.type) opt.selected = true;
+    typeSelect.appendChild(opt);
   });
+  typeSelect.onchange = e => {
+    port.type = e.target.value;
+    if (port.type !== 'IO-Link') port.device = 'None';
+    renderAll();
+  };
+  div.appendChild(typeSelect);
+
+  if (port.type === 'IO-Link') {
+    const devRow = document.createElement('div');
+    devRow.className = 'device-row';
+
+    const iconDiv = document.createElement('div');
+    iconDiv.className = 'device-icon';
+    iconDiv.innerHTML = DEVICE_ICONS[port.device] || DEVICE_ICONS['None'];
+
+    const devSelect = document.createElement('select');
+    devSelect.className = 'port-device-select';
+    DEVICE_TYPES.forEach(d => {
+      const opt = document.createElement('option');
+      opt.value = d;
+      opt.textContent = d === 'None' ? '— Select device' : d;
+      if (d === port.device) opt.selected = true;
+      devSelect.appendChild(opt);
+    });
+    devSelect.onchange = e => {
+      port.device = e.target.value;
+      iconDiv.innerHTML = DEVICE_ICONS[port.device] || DEVICE_ICONS['None'];
+      // no full re-render needed, icon updated inline
+    };
+
+    devRow.appendChild(iconDiv);
+    devRow.appendChild(devSelect);
+    div.appendChild(devRow);
+  }
+
+  const nameInp = document.createElement('input');
+  nameInp.className = 'port-name-input';
+  nameInp.placeholder = port.type === 'IO-Link' ? 'Label device...' : 'Label port...';
+  nameInp.value = port.name;
+  nameInp.oninput = e => { port.name = e.target.value; };
+  div.appendChild(nameInp);
+
+  return div;
 }
 
 function addModule() {
-  const mod = createModule();
-  modules.push(mod);
+  modules.push(createModule());
   renderAll();
-}
-
-function editPanelSources() {
-  const name = prompt('Panel Power Source Name:', document.getElementById('panel-source-label').textContent);
-  if (name) document.getElementById('panel-source-label').textContent = name.trim().toUpperCase();
-  const eth = prompt('Panel Ethernet Source Name:', document.getElementById('panel-eth-label').textContent);
-  if (eth) document.getElementById('panel-eth-label').textContent = eth.trim().toUpperCase();
 }
 
 function saveLayout() {
@@ -960,20 +692,13 @@ function importLayout() {
         modules = JSON.parse(evt.target.result);
         moduleIdCounter = Math.max(...modules.map(m => m.id), 0);
         renderAll();
-      } catch(err) {
-        alert('Invalid JSON file.');
-      }
+      } catch { alert('Invalid JSON file.'); }
     };
     reader.readAsText(file);
   };
   input.click();
 }
 
-// Redraw arrows on scroll/resize
-window.addEventListener('scroll', drawArrows, true);
-window.addEventListener('resize', drawArrows);
-
-// Init with 2 sample modules
 addModule();
 addModule();
 </script>
