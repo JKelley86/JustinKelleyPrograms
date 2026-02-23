@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IO-Link Network Troubleshooter</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow:wght@300;400;600;700&display=swap');
+
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #21262d;
+    --border: #30363d;
+    --accent: #f0a500;
+    --accent2: #00d4aa;
+    --danger: #ff4757;
+    --info: #4a9eff;
+    --text: #e6edf3;
+    --text-dim: #8b949e;
+    --port-in: #1a3a4a;
+    --port-out: #2a1a3a;
+    --port-iol: #1a3a1a;
+    --power-color: #ff6b35;
+    --eth-color: #4a9eff;
+    --mono: 'Share Tech Mono', monospace;
+    --sans: 'Barlow', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(240,165,0,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(240,165,0,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  #app { position: relative; z-index: 1; }
+
+  /* HEADER */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 32px;
+    background: var(--surface);
+    border-bottom: 2px solid var(--accent);
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .header-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo-mark {
+    width: 36px;
+    height: 36px;
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-weight: bold;
+    color: #000;
+    font-size: 14px;
+    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+  }
+
+  header h1 {
+    font-family: var(--mono);
+    font-size: 18px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  header p {
+    font-size: 12px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .header-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    font-family: var(--mono);
+    font-size: 12px;
+    padding: 8px 16px;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--text);
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.15s;
+    clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
+  }
+
+  .btn:hover { background: var(--border); }
+  .btn.primary { border-color: var(--accent); color: var(--accent); }
+  .btn.primary:hover { background: rgba(240,165,0,0.15); }
+  .btn.danger { border-color: var(--danger); color: var(--danger); }
+  .btn.danger:hover { background: rgba(255,71,87,0.15); }
+
+  /* MAIN LAYOUT */
+  main {
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  /* PANEL SOURCE SECTION */
+  .source-bar {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .source-bar label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .source-bar .source-label {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: bold;
+    padding: 4px 12px;
+    border: 1px solid var(--accent);
+    background: rgba(240,165,0,0.1);
+  }
+
+  /* MODULES GRID */
+  .modules-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    align-items: flex-start;
+  }
+
+  /* MODULE CARD */
+  .module-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    width: 340px;
+    flex-shrink: 0;
+    position: relative;
+    animation: slideIn 0.3s ease;
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .module-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+  }
+
+  .module-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface2);
+    gap: 8px;
+  }
+
+  .module-id {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+  }
+
+  .module-name-input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px dashed var(--border);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 14px;
+    font-weight: 600;
+    flex: 1;
+    padding: 2px 4px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .module-name-input:focus {
+    outline: none;
+    border-bottom-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .module-delete {
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    cursor: pointer;
+    font-size: 16px;
+    padding: 2px 6px;
+    transition: color 0.15s;
+  }
+  .module-delete:hover { color: var(--danger); }
+
+  /* SPECIAL PORTS: Power & Ethernet */
+  .special-ports {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .special-port {
+    padding: 8px 12px;
+    border-right: 1px solid var(--border);
+    position: relative;
+  }
+
+  .special-port:last-child { border-right: none; }
+
+  .special-port-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+
+  .special-port.power .special-port-label { color: var(--power-color); }
+  .special-port.eth .special-port-label { color: var(--eth-color); }
+
+  .special-port-name {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    cursor: pointer;
+    border-bottom: 1px dashed transparent;
+    transition: all 0.15s;
+    display: inline-block;
+    min-width: 60px;
+  }
+
+  .special-port-name:hover {
+    border-bottom-color: var(--border);
+    color: var(--text);
+  }
+
+  .jumper-toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 4px;
+  }
+
+  .jumper-toggle input[type="checkbox"] {
+    appearance: none;
+    width: 28px;
+    height: 14px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s;
+  }
+
+  .jumper-toggle input[type="checkbox"]:checked {
+    background: rgba(240,165,0,0.3);
+    border-color: var(--accent);
+  }
+
+  .jumper-toggle input[type="checkbox"]::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 8px;
+    height: 8px;
+    background: var(--text-dim);
+    transition: all 0.2s;
+  }
+
+  .jumper-toggle input[type="checkbox"]:checked::after {
+    left: 16px;
+    background: var(--accent);
+  }
+
+  .jumper-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+  }
+
+  .jumper-source-select {
+    font-family: var(--mono);
+    font-size: 10px;
+    background: var(--surface2);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 2px 6px;
+    margin-top: 4px;
+    width: 100%;
+    cursor: pointer;
+  }
+
+  /* IO PORTS */
+  .io-ports {
+    padding: 8px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+
+  .io-port {
+    border: 1px solid var(--border);
+    padding: 8px;
+    position: relative;
+    transition: border-color 0.15s;
+    cursor: pointer;
+  }
+
+  .io-port:hover { border-color: var(--text-dim); }
+  .io-port.type-input { border-left: 3px solid var(--info); }
+  .io-port.type-output { border-left: 3px solid var(--accent2); }
+  .io-port.type-iolink { border-left: 3px solid var(--accent); }
+
+  .port-number {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text-dim);
+    margin-bottom: 4px;
+    text-transform: uppercase;
+  }
+
+  .port-type-select {
+    font-family: var(--mono);
+    font-size: 10px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 2px 4px;
+    width: 100%;
+    margin-bottom: 4px;
+    cursor: pointer;
+  }
+
+  .port-device-select {
+    font-family: var(--mono);
+    font-size: 10px;
+    background: rgba(240,165,0,0.08);
+    border: 1px solid rgba(240,165,0,0.3);
+    color: var(--accent);
+    padding: 2px 4px;
+    width: 100%;
+    margin-bottom: 4px;
+    cursor: pointer;
+  }
+
+  .port-name-input {
+    font-family: var(--mono);
+    font-size: 11px;
+    background: transparent;
+    border: none;
+    border-bottom: 1px dashed var(--border);
+    color: var(--text);
+    padding: 2px 2px;
+    width: 100%;
+  }
+
+  .port-name-input:focus {
+    outline: none;
+    border-bottom-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .port-name-input::placeholder {
+    color: var(--text-dim);
+    font-style: italic;
+  }
+
+  /* STATUS INDICATORS */
+  .port-status {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--border);
+  }
+
+  .io-port.type-input .port-status { background: var(--info); box-shadow: 0 0 4px var(--info); }
+  .io-port.type-output .port-status { background: var(--accent2); box-shadow: 0 0 4px var(--accent2); }
+  .io-port.type-iolink .port-status { background: var(--accent); box-shadow: 0 0 4px var(--accent); }
+
+  /* JUMPER ARROWS SVG OVERLAY */
+  #arrow-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  /* LEGEND */
+  .legend {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    padding: 16px 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    align-items: center;
+  }
+
+  .legend-title {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-right: 8px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  .legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .legend-bar {
+    width: 20px;
+    height: 4px;
+    flex-shrink: 0;
+  }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--accent);
+    padding: 32px;
+    min-width: 320px;
+    position: relative;
+  }
+
+  .modal h2 {
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+  }
+
+  .modal label {
+    display: block;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+    margin-top: 12px;
+  }
+
+  .modal input, .modal select {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 13px;
+    padding: 8px 12px;
+  }
+
+  .modal input:focus, .modal select:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  /* Jumper arrow line styling */
+  .jumper-arrow {
+    stroke: var(--accent);
+    stroke-width: 2;
+    fill: none;
+    stroke-dasharray: 6 3;
+    marker-end: url(#arrowhead);
+    opacity: 0.8;
+  }
+
+  .jumper-arrow.eth {
+    stroke: var(--eth-color);
+    marker-end: url(#arrowhead-eth);
+  }
+
+  /* Tooltip */
+  .jumper-tooltip {
+    font-family: var(--mono);
+    font-size: 10px;
+    fill: var(--accent);
+  }
+
+  /* Scrollable canvas */
+  #canvas {
+    overflow-x: auto;
+    overflow-y: auto;
+  }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- SVG Arrow Overlay -->
+  <svg id="arrow-overlay">
+    <defs>
+      <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+        <polygon points="0 0, 8 3, 0 6" fill="#f0a500" opacity="0.9"/>
+      </marker>
+      <marker id="arrowhead-eth" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+        <polygon points="0 0, 8 3, 0 6" fill="#4a9eff" opacity="0.9"/>
+      </marker>
+      <filter id="glow">
+        <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+        <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+  </svg>
+
+  <header>
+    <div class="header-brand">
+      <div class="logo-mark">IOL</div>
+      <div>
+        <h1>IO-Link Troubleshooter</h1>
+        <p>Network Diagnostic Flow Diagram</p>
+      </div>
+    </div>
+    <div class="header-controls">
+      <button class="btn primary" onclick="addModule()">+ Add Module</button>
+      <button class="btn" onclick="saveLayout()">Export JSON</button>
+      <button class="btn" onclick="importLayout()">Import JSON</button>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- Legend -->
+    <div class="legend">
+      <span class="legend-title">Legend:</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#4a9eff;box-shadow:0 0 4px #4a9eff"></span> Input</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#00d4aa;box-shadow:0 0 4px #00d4aa"></span> Output</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#f0a500;box-shadow:0 0 4px #f0a500"></span> IO-Link Device</span>
+      <span class="legend-item"><span class="legend-bar" style="background:#f0a500;opacity:0.7"></span> Power Jumper</span>
+      <span class="legend-item"><span class="legend-bar" style="background:#4a9eff;opacity:0.7"></span> Ethernet Jumper</span>
+      <span class="legend-item" style="margin-left:auto;">
+        <span style="font-size:11px;color:var(--text-dim);">Click port names to rename • Toggle jumpers below power/eth ports</span>
+      </span>
+    </div>
+
+    <!-- Panel Power Source Bar -->
+    <div class="source-bar">
+      <label>Network Power Source:</label>
+      <span class="source-label" id="panel-source-label">PANEL</span>
+      <label style="margin-left:16px;">Panel Eth Source:</label>
+      <span class="source-label" style="border-color:var(--eth-color);color:var(--eth-color);background:rgba(74,158,255,0.1);" id="panel-eth-label">SWITCH</span>
+      <button class="btn" style="margin-left:auto;" onclick="editPanelSources()">Edit Sources</button>
+    </div>
+
+    <!-- Modules -->
+    <div class="modules-grid" id="modules-grid"></div>
+
+  </main>
+</div>
+
+<script>
+let modules = [];
+let moduleIdCounter = 0;
+
+const DEVICE_TYPES = ['None', 'Touch Button Light', 'Rail & Status Light', 'RFID Sensor'];
+const PORT_TYPES = ['Input', 'Output', 'IO-Link'];
+
+function createModule() {
+  moduleIdCounter++;
+  const id = moduleIdCounter;
+  const ports = Array.from({length: 8}, (_, i) => ({
+    number: i + 1,
+    type: 'Input',
+    device: 'None',
+    name: ''
+  }));
+
+  return {
+    id,
+    name: `Module ${id}`,
+    power1: { name: 'PWR-1', jumpered: false, jumpSource: '' },
+    power2: { name: 'PWR-2', jumpered: false, jumpSource: '' },
+    eth1: { name: 'ETH-1', jumpered: false, jumpSource: '' },
+    eth2: { name: 'ETH-2', jumpered: false, jumpSource: '' },
+    ports
+  };
+}
+
+function getAllModuleNames() {
+  return ['PANEL', ...modules.map(m => m.name)];
+}
+
+function renderAll() {
+  renderModules();
+  setTimeout(drawArrows, 100);
+}
+
+function renderModules() {
+  const grid = document.getElementById('modules-grid');
+  grid.innerHTML = '';
+  modules.forEach(mod => {
+    grid.appendChild(buildModuleCard(mod));
+  });
+}
+
+function buildModuleCard(mod) {
+  const card = document.createElement('div');
+  card.className = 'module-card';
+  card.dataset.modId = mod.id;
+
+  // Header
+  const header = document.createElement('div');
+  header.className = 'module-header';
+
+  const idSpan = document.createElement('span');
+  idSpan.className = 'module-id';
+  idSpan.textContent = `#${mod.id}`;
+
+  const nameInput = document.createElement('input');
+  nameInput.className = 'module-name-input';
+  nameInput.value = mod.name;
+  nameInput.addEventListener('input', e => { mod.name = e.target.value; setTimeout(drawArrows, 50); });
+
+  const delBtn = document.createElement('button');
+  delBtn.className = 'module-delete';
+  delBtn.innerHTML = '✕';
+  delBtn.title = 'Delete module';
+  delBtn.onclick = () => { modules = modules.filter(m => m.id !== mod.id); renderAll(); };
+
+  header.appendChild(idSpan);
+  header.appendChild(nameInput);
+  header.appendChild(delBtn);
+  card.appendChild(header);
+
+  // Special ports (2 power + 2 eth)
+  const specialPorts = document.createElement('div');
+  specialPorts.className = 'special-ports';
+
+  const specialDefs = [
+    { key: 'power1', label: 'POWER PORT 1', cls: 'power', color: 'power-color' },
+    { key: 'power2', label: 'POWER PORT 2', cls: 'power', color: 'power-color' },
+    { key: 'eth1', label: 'ETHERNET 1', cls: 'eth', color: 'eth-color' },
+    { key: 'eth2', label: 'ETHERNET 2', cls: 'eth', color: 'eth-color' },
+  ];
+
+  specialDefs.forEach(def => {
+    const portData = mod[def.key];
+    const sp = document.createElement('div');
+    sp.className = `special-port ${def.cls}`;
+    sp.dataset.portKey = def.key;
+    sp.dataset.modId = mod.id;
+
+    const label = document.createElement('div');
+    label.className = 'special-port-label';
+    label.textContent = def.label;
+
+    const nameEl = document.createElement('span');
+    nameEl.className = 'special-port-name';
+    nameEl.textContent = portData.name;
+    nameEl.title = 'Click to rename';
+    nameEl.onclick = () => {
+      const newName = prompt('Rename port:', portData.name);
+      if (newName !== null && newName.trim()) {
+        portData.name = newName.trim();
+        renderAll();
+      }
+    };
+
+    const jumperToggle = document.createElement('div');
+    jumperToggle.className = 'jumper-toggle';
+
+    const chk = document.createElement('input');
+    chk.type = 'checkbox';
+    chk.checked = portData.jumpered;
+    chk.onchange = e => {
+      portData.jumpered = e.target.checked;
+      if (!e.target.checked) portData.jumpSource = '';
+      renderAll();
+    };
+
+    const jLabel = document.createElement('span');
+    jLabel.className = 'jumper-label';
+    jLabel.textContent = 'JUMPERED';
+
+    jumperToggle.appendChild(chk);
+    jumperToggle.appendChild(jLabel);
+
+    sp.appendChild(label);
+    sp.appendChild(nameEl);
+    sp.appendChild(jumperToggle);
+
+    if (portData.jumpered) {
+      const sourceSelect = document.createElement('select');
+      sourceSelect.className = 'jumper-source-select';
+      const sources = getAllModuleNames().filter(n => n !== mod.name);
+      sources.forEach(s => {
+        const opt = document.createElement('option');
+        opt.value = s;
+        opt.textContent = s;
+        if (s === portData.jumpSource) opt.selected = true;
+        sourceSelect.appendChild(opt);
+      });
+      if (!portData.jumpSource && sources.length) portData.jumpSource = sources[0];
+      sourceSelect.onchange = e => { portData.jumpSource = e.target.value; drawArrows(); };
+      sp.appendChild(sourceSelect);
+    }
+
+    specialPorts.appendChild(sp);
+  });
+
+  // Only show first 4 in a 2x2 grid... actually show all 4
+  card.appendChild(specialPorts);
+
+  // IO Ports
+  const ioSection = document.createElement('div');
+  ioSection.className = 'io-ports';
+
+  mod.ports.forEach((port, idx) => {
+    const portDiv = document.createElement('div');
+    portDiv.className = `io-port type-${port.type.toLowerCase().replace('-', '')}`;
+
+    const statusDot = document.createElement('div');
+    statusDot.className = 'port-status';
+
+    const numDiv = document.createElement('div');
+    numDiv.className = 'port-number';
+    numDiv.textContent = `PORT ${port.number}`;
+
+    const typeSelect = document.createElement('select');
+    typeSelect.className = 'port-type-select';
+    PORT_TYPES.forEach(t => {
+      const opt = document.createElement('option');
+      opt.value = t;
+      opt.textContent = t;
+      if (t === port.type) opt.selected = true;
+      typeSelect.appendChild(opt);
+    });
+    typeSelect.onchange = e => {
+      port.type = e.target.value;
+      if (port.type !== 'IO-Link') port.device = 'None';
+      portDiv.className = `io-port type-${port.type.replace('-','').replace('IO','IO').toLowerCase()}`;
+      renderAll();
+    };
+
+    portDiv.appendChild(statusDot);
+    portDiv.appendChild(numDiv);
+    portDiv.appendChild(typeSelect);
+
+    if (port.type === 'IO-Link') {
+      const devSelect = document.createElement('select');
+      devSelect.className = 'port-device-select';
+      DEVICE_TYPES.forEach(d => {
+        const opt = document.createElement('option');
+        opt.value = d;
+        opt.textContent = d;
+        if (d === port.device) opt.selected = true;
+        devSelect.appendChild(opt);
+      });
+      devSelect.onchange = e => { port.device = e.target.value; renderAll(); };
+      portDiv.appendChild(devSelect);
+    }
+
+    const nameInput = document.createElement('input');
+    nameInput.className = 'port-name-input';
+    nameInput.placeholder = port.type === 'IO-Link' ? 'Label device...' : 'Label port...';
+    nameInput.value = port.name;
+    nameInput.oninput = e => { port.name = e.target.value; };
+    portDiv.appendChild(nameInput);
+
+    ioSection.appendChild(portDiv);
+  });
+
+  card.appendChild(ioSection);
+
+  return card;
+}
+
+function drawArrows() {
+  const svg = document.getElementById('arrow-overlay');
+  // Remove old arrows
+  svg.querySelectorAll('.jumper-arrow, .jumper-label-text').forEach(el => el.remove());
+
+  modules.forEach(mod => {
+    const cardEl = document.querySelector(`[data-mod-id="${mod.id}"]`);
+    if (!cardEl) return;
+
+    const specialDefs = ['power1', 'power2', 'eth1', 'eth2'];
+    specialDefs.forEach(key => {
+      const portData = mod[key];
+      if (!portData.jumpered || !portData.jumpSource) return;
+
+      const portEl = cardEl.querySelector(`[data-port-key="${key}"]`);
+      if (!portEl) return;
+
+      const toRect = portEl.getBoundingClientRect();
+      const toX = toRect.left + toRect.width / 2;
+      const toY = toRect.top + toRect.height / 2;
+
+      let fromX, fromY;
+      const isEth = key.startsWith('eth');
+
+      if (portData.jumpSource === 'PANEL') {
+        fromX = 60;
+        fromY = 200;
+      } else {
+        // Find source module card
+        const srcMod = modules.find(m => m.name === portData.jumpSource);
+        if (srcMod) {
+          const srcCard = document.querySelector(`[data-mod-id="${srcMod.id}"]`);
+          if (srcCard) {
+            const srcRect = srcCard.getBoundingClientRect();
+            fromX = srcRect.left + srcRect.width / 2;
+            fromY = srcRect.top + 40;
+          }
+        }
+      }
+
+      if (fromX === undefined) return;
+
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      const cx1 = fromX;
+      const cy1 = (fromY + toY) / 2 - 30;
+      const cx2 = toX;
+      const cy2 = (fromY + toY) / 2 - 30;
+      path.setAttribute('d', `M ${fromX} ${fromY} C ${cx1} ${cy1}, ${cx2} ${cy2}, ${toX} ${toY}`);
+      path.className.baseVal = isEth ? 'jumper-arrow eth' : 'jumper-arrow';
+      path.setAttribute('filter', 'url(#glow)');
+      svg.appendChild(path);
+
+      // Label on midpoint
+      const midX = (fromX + toX) / 2;
+      const midY = ((fromY + toY) / 2) - 40;
+      const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      text.setAttribute('x', midX);
+      text.setAttribute('y', midY);
+      text.setAttribute('text-anchor', 'middle');
+      text.className.baseVal = 'jumper-label-text';
+      text.style.fontFamily = "'Share Tech Mono', monospace";
+      text.style.fontSize = '10px';
+      text.style.fill = isEth ? '#4a9eff' : '#f0a500';
+      text.textContent = `${portData.jumpSource} → ${portData.name}`;
+      svg.appendChild(text);
+    });
+  });
+}
+
+function addModule() {
+  const mod = createModule();
+  modules.push(mod);
+  renderAll();
+}
+
+function editPanelSources() {
+  const name = prompt('Panel Power Source Name:', document.getElementById('panel-source-label').textContent);
+  if (name) document.getElementById('panel-source-label').textContent = name.trim().toUpperCase();
+  const eth = prompt('Panel Ethernet Source Name:', document.getElementById('panel-eth-label').textContent);
+  if (eth) document.getElementById('panel-eth-label').textContent = eth.trim().toUpperCase();
+}
+
+function saveLayout() {
+  const json = JSON.stringify(modules, null, 2);
+  const blob = new Blob([json], {type: 'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'iolink-layout.json';
+  a.click();
+}
+
+function importLayout() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.json';
+  input.onchange = e => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = evt => {
+      try {
+        modules = JSON.parse(evt.target.result);
+        moduleIdCounter = Math.max(...modules.map(m => m.id), 0);
+        renderAll();
+      } catch(err) {
+        alert('Invalid JSON file.');
+      }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
+
+// Redraw arrows on scroll/resize
+window.addEventListener('scroll', drawArrows, true);
+window.addEventListener('resize', drawArrows);
+
+// Init with 2 sample modules
+addModule();
+addModule();
+</script>
+</body>
+</html>
