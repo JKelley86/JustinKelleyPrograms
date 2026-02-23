@@ -20,86 +20,98 @@
     --text-dim: #8b949e;
     --power-color: #ff6b35;
     --eth-color: #4a9eff;
+    --online-color: #00d4aa;
+    --offline-color: #8b949e;
+    --fault-color: #ff4757;
     --mono: 'Share Tech Mono', monospace;
     --sans: 'Barlow', sans-serif;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--sans);
-    min-height: 100vh;
-  }
-
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; }
   body::before {
-    content: '';
-    position: fixed; inset: 0;
-    background-image:
-      linear-gradient(rgba(240,165,0,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(240,165,0,0.03) 1px, transparent 1px);
-    background-size: 40px 40px;
-    pointer-events: none; z-index: 0;
+    content: ''; position: fixed; inset: 0;
+    background-image: linear-gradient(rgba(240,165,0,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(240,165,0,0.03) 1px,transparent 1px);
+    background-size: 40px 40px; pointer-events: none; z-index: 0;
   }
-
   #app { position: relative; z-index: 1; }
 
   /* ── HEADER ── */
   header {
     display: flex; align-items: center; justify-content: space-between;
-    padding: 13px 24px; background: var(--surface);
-    border-bottom: 2px solid var(--accent);
-    gap: 16px; flex-wrap: wrap;
-    position: sticky; top: 0; z-index: 200;
+    padding: 11px 20px; background: var(--surface); border-bottom: 2px solid var(--accent);
+    gap: 12px; flex-wrap: wrap; position: sticky; top: 0; z-index: 200;
   }
-  .header-brand { display: flex; align-items: center; gap: 12px; }
+  .header-brand { display: flex; align-items: center; gap: 10px; }
   .logo-mark {
-    width: 34px; height: 34px; background: var(--accent);
+    width: 32px; height: 32px; background: var(--accent);
     display: flex; align-items: center; justify-content: center;
-    font-family: var(--mono); font-weight: bold; color: #000; font-size: 12px;
-    clip-path: polygon(0 0, calc(100% - 7px) 0, 100% 7px, 100% 100%, 7px 100%, 0 calc(100% - 7px));
+    font-family: var(--mono); font-weight: bold; color: #000; font-size: 11px;
+    clip-path: polygon(0 0,calc(100% - 7px) 0,100% 7px,100% 100%,7px 100%,0 calc(100% - 7px));
   }
-  header h1 { font-family: var(--mono); font-size: 16px; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; }
-  header p  { font-size: 10px; color: var(--text-dim); letter-spacing: 1px; text-transform: uppercase; }
-  .header-controls { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  header h1 { font-family: var(--mono); font-size: 15px; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; }
+  header p  { font-size: 9px; color: var(--text-dim); letter-spacing: 1px; text-transform: uppercase; }
+  .header-controls { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+
+  /* Search bar */
+  .search-wrap { position: relative; }
+  .search-input {
+    font-family: var(--mono); font-size: 11px;
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--text); padding: 5px 10px 5px 28px;
+    width: 200px; transition: all 0.2s;
+  }
+  .search-input:focus { outline: none; border-color: var(--accent); width: 240px; }
+  .search-input::placeholder { color: var(--text-dim); }
+  .search-icon {
+    position: absolute; left: 8px; top: 50%; transform: translateY(-50%);
+    color: var(--text-dim); font-size: 12px; pointer-events: none;
+  }
+  .search-clear {
+    position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; color: var(--text-dim); cursor: pointer; font-size: 12px; padding: 0;
+    display: none;
+  }
+  .search-clear.visible { display: block; }
+
   .btn {
-    font-family: var(--mono); font-size: 11px; padding: 6px 13px;
+    font-family: var(--mono); font-size: 11px; padding: 6px 12px;
     border: 1px solid var(--border); background: var(--surface2); color: var(--text);
     cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: all 0.15s;
-    clip-path: polygon(0 0, calc(100% - 5px) 0, 100% 5px, 100% 100%, 5px 100%, 0 calc(100% - 5px));
+    clip-path: polygon(0 0,calc(100% - 5px) 0,100% 5px,100% 100%,5px 100%,0 calc(100% - 5px));
+    white-space: nowrap;
   }
   .btn:hover { background: var(--border); }
   .btn.primary { border-color: var(--accent); color: var(--accent); }
   .btn.primary:hover { background: rgba(240,165,0,0.15); }
+  .btn.pdf-btn { border-color: rgba(0,212,170,0.5); color: var(--accent2); }
+  .btn.pdf-btn:hover { background: rgba(0,212,170,0.1); }
 
   /* ── MAIN ── */
-  main { padding: 20px 24px; display: flex; flex-direction: column; gap: 16px; overflow-x: auto; }
+  main { padding: 16px 20px; display: flex; flex-direction: column; gap: 12px; overflow-x: auto; }
 
   /* ── LEGEND ── */
   .legend {
-    display: flex; gap: 16px; flex-wrap: wrap;
-    padding: 10px 16px; background: var(--surface); border: 1px solid var(--border);
+    display: flex; gap: 14px; flex-wrap: wrap;
+    padding: 8px 14px; background: var(--surface); border: 1px solid var(--border);
     align-items: center; flex-shrink: 0;
   }
   .legend-title { font-family: var(--mono); font-size: 9px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; }
-  .legend-item { display: flex; align-items: center; gap: 5px; font-family: var(--mono); font-size: 9px; color: var(--text-dim); }
+  .legend-item { display: flex; align-items: center; gap: 4px; font-family: var(--mono); font-size: 9px; color: var(--text-dim); }
   .legend-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-  .legend-dash { width: 18px; height: 0; border-top: 2px dashed; flex-shrink: 0; }
+  .legend-dash { width: 16px; height: 0; border-top: 2px dashed; flex-shrink: 0; }
+  .legend-sq { width: 9px; height: 9px; border: 1px solid; flex-shrink: 0; }
 
   /* ── PANEL SOURCE BAR ── */
   .panel-bar {
-    display: flex; align-items: center; gap: 20px;
-    padding: 10px 16px;
-    background: var(--surface); border: 1px solid var(--border);
-    border-left: 4px solid var(--accent);
-    flex-shrink: 0; flex-wrap: wrap;
+    display: flex; align-items: center; gap: 16px;
+    padding: 8px 14px; background: var(--surface); border: 1px solid var(--border);
+    border-left: 4px solid var(--accent); flex-shrink: 0; flex-wrap: wrap;
   }
   .panel-bar-label { font-family: var(--mono); font-size: 9px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
   .editable-badge {
-    font-family: var(--mono); font-size: 12px; font-weight: 700;
-    padding: 3px 10px; border: 1px solid; cursor: pointer;
-    transition: all 0.15s;
+    font-family: var(--mono); font-size: 11px; font-weight: 700;
+    padding: 2px 9px; border: 1px solid; cursor: pointer; transition: all 0.15s;
   }
   .editable-badge.pwr { color: var(--power-color); border-color: rgba(255,107,53,0.5); background: rgba(255,107,53,0.07); }
   .editable-badge.pwr:hover { background: rgba(255,107,53,0.15); }
@@ -107,31 +119,24 @@
   .editable-badge.eth:hover { background: rgba(74,158,255,0.15); }
   .panel-bar-hint { font-family: var(--mono); font-size: 9px; color: var(--text-dim); margin-left: auto; }
 
-  /* ── CANVAS: rows of chains ── */
-  #canvas { display: flex; flex-direction: column; gap: 16px; }
+  /* ── CANVAS ── */
+  #canvas { display: flex; flex-direction: column; gap: 14px; }
 
   /* ── CHAIN ROW ── */
-  .chain-row {
-    display: flex; align-items: flex-start; gap: 0;
-    position: relative;
-  }
-
-  /* Panel stub styles are defined in the connector section above */
+  .chain-row { display: flex; align-items: flex-start; gap: 0; position: relative; }
 
   /* Add-to-row button */
   .add-to-row-btn {
     display: flex; align-items: center; justify-content: center;
-    width: 38px; align-self: stretch; min-height: 80px;
+    width: 36px; align-self: stretch; min-height: 80px;
     background: transparent; border: 1px dashed var(--border);
-    color: var(--text-dim); font-size: 18px; cursor: pointer;
-    flex-shrink: 0; transition: all 0.15s;
+    color: var(--text-dim); font-size: 18px; cursor: pointer; flex-shrink: 0; transition: all 0.15s;
   }
   .add-to-row-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(240,165,0,0.04); }
 
   /* Add new row button */
   .add-row-btn {
-    display: flex; align-items: center; gap: 10px;
-    padding: 10px 18px;
+    display: flex; align-items: center; gap: 8px; padding: 9px 16px;
     background: transparent; border: 1px dashed var(--border);
     color: var(--text-dim); font-family: var(--mono); font-size: 11px;
     cursor: pointer; text-transform: uppercase; letter-spacing: 1px;
@@ -139,159 +144,153 @@
   }
   .add-row-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(240,165,0,0.04); }
 
-  /* ── CONNECTOR BETWEEN MODULES ── */
-  .chain-connector {
-    display: flex; flex-direction: column; justify-content: flex-start;
-    padding-top: 60px; gap: 0px;
-    flex-shrink: 0; width: 80px;
-  }
-
-  .cable-slot {
-    display: flex; flex-direction: column; align-items: stretch;
-    position: relative; height: 28px; justify-content: center;
-  }
-
-  .conn-line {
-    height: 3px; width: 100%; position: relative; flex-shrink: 0;
-  }
-  .conn-line.pwr-on  { background: linear-gradient(90deg, var(--power-color), rgba(255,107,53,0.5)); }
-  .conn-line.eth-on  { background: linear-gradient(90deg, var(--eth-color),   rgba(74,158,255,0.5)); }
-  .conn-line.off     { background: var(--border); opacity: 0.4; }
-  .conn-line.pwr-on::after, .conn-line.eth-on::after, .conn-line.off::after {
-    content: ''; position: absolute; right: -1px; top: -3.5px;
-    width: 0; height: 0;
-    border-top: 5px solid transparent; border-bottom: 5px solid transparent;
-  }
-  .conn-line.pwr-on::after  { border-left: 7px solid var(--power-color); }
-  .conn-line.eth-on::after  { border-left: 7px solid var(--eth-color); }
-  .conn-line.off::after     { border-left: 7px solid var(--border); }
-
-  /* Cable label tag sits on the wire */
-  .cable-label-wrap {
-    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    z-index: 10;
-  }
-  .cable-label-input {
-    font-family: var(--mono); font-size: 8px;
-    background: var(--surface2);
-    border: 1px solid;
-    color: var(--text);
-    padding: 1px 4px;
-    width: 64px;
-    text-align: center;
-    display: block;
-    letter-spacing: 0.5px;
-    transition: all 0.15s;
-  }
-  .cable-label-input.pwr-label {
-    border-color: rgba(255,107,53,0.6);
-    color: var(--power-color);
-    background: rgba(13,17,23,0.92);
-  }
-  .cable-label-input.eth-label {
-    border-color: rgba(74,158,255,0.6);
-    color: var(--eth-color);
-    background: rgba(13,17,23,0.92);
-  }
-  .cable-label-input.off-label {
-    border-color: var(--border);
-    color: var(--text-dim);
-    background: rgba(13,17,23,0.92);
-    opacity: 0.5;
-  }
-  .cable-label-input:focus {
-    outline: none;
-    width: 72px;
-  }
-  .cable-label-input.pwr-label:focus { border-color: var(--power-color); color: var(--power-color); }
-  .cable-label-input.eth-label:focus { border-color: var(--eth-color);   color: var(--eth-color); }
-  .cable-label-input::placeholder { color: var(--text-dim); font-style: italic; opacity: 0.6; }
-
-  /* Panel stub also needs wider width to show labels */
+  /* ── PANEL STUB ── */
   .panel-stub {
-    display: flex; flex-direction: column; justify-content: flex-start;
-    align-items: stretch;
-    padding-top: 60px;
-    gap: 0px;
-    width: 80px; flex-shrink: 0;
-    position: relative;
+    display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
+    padding-top: 82px; gap: 0; width: 80px; flex-shrink: 0; position: relative;
   }
   .panel-stub::after {
-    content: 'PANEL';
-    position: absolute; bottom: 0; left: 0; right: 0;
-    text-align: center;
-    font-family: var(--mono); font-size: 8px; color: var(--text-dim);
-    text-transform: uppercase; letter-spacing: 1px;
-    padding-bottom: 6px;
+    content: 'PANEL'; position: absolute; bottom: 0; left: 0; right: 0;
+    text-align: center; font-family: var(--mono); font-size: 8px; color: var(--text-dim);
+    text-transform: uppercase; letter-spacing: 1px; padding-bottom: 6px;
   }
-  .stub-line {
-    width: 100%; height: 3px; position: relative; flex-shrink: 0;
-  }
-  .stub-line.pwr { background: linear-gradient(90deg, var(--power-color) 60%, transparent); }
-  .stub-line.eth { background: linear-gradient(90deg, var(--eth-color)   60%, transparent); }
+  .stub-line { width: 100%; height: 3px; position: relative; flex-shrink: 0; }
+  .stub-line.pwr { background: linear-gradient(90deg,var(--power-color) 60%,transparent); }
+  .stub-line.eth { background: linear-gradient(90deg,var(--eth-color) 60%,transparent); }
   .stub-line::after {
     content: ''; position: absolute; right: -1px; top: -3.5px;
-    width: 0; height: 0;
-    border-top: 5px solid transparent;
-    border-bottom: 5px solid transparent;
+    width: 0; height: 0; border-top: 5px solid transparent; border-bottom: 5px solid transparent;
   }
   .stub-line.pwr::after { border-left: 7px solid var(--power-color); }
   .stub-line.eth::after { border-left: 7px solid var(--eth-color); }
 
+  /* ── CONNECTOR ── */
+  .chain-connector {
+    display: flex; flex-direction: column; justify-content: flex-start;
+    padding-top: 82px; gap: 0; flex-shrink: 0; width: 80px;
+  }
+  .cable-slot {
+    display: flex; flex-direction: column; align-items: stretch;
+    position: relative; height: 28px; justify-content: center;
+  }
+  .conn-line { height: 3px; width: 100%; position: relative; flex-shrink: 0; }
+  .conn-line.pwr-on { background: linear-gradient(90deg,var(--power-color),rgba(255,107,53,0.5)); }
+  .conn-line.eth-on { background: linear-gradient(90deg,var(--eth-color),rgba(74,158,255,0.5)); }
+  .conn-line.off    { background: var(--border); opacity: 0.4; }
+  .conn-line.pwr-on::after,.conn-line.eth-on::after,.conn-line.off::after {
+    content: ''; position: absolute; right: -1px; top: -3.5px;
+    width: 0; height: 0; border-top: 5px solid transparent; border-bottom: 5px solid transparent;
+  }
+  .conn-line.pwr-on::after { border-left: 7px solid var(--power-color); }
+  .conn-line.eth-on::after { border-left: 7px solid var(--eth-color); }
+  .conn-line.off::after    { border-left: 7px solid var(--border); }
+
+  /* Cable label */
+  .cable-label-wrap { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); z-index: 10; }
+  .cable-label-input {
+    font-family: var(--mono); font-size: 8px; border: 1px solid;
+    padding: 1px 4px; width: 64px; text-align: center; display: block;
+    letter-spacing: 0.5px; transition: all 0.15s;
+  }
+  .cable-label-input.pwr-label { border-color: rgba(255,107,53,0.6); color: var(--power-color); background: rgba(13,17,23,0.92); }
+  .cable-label-input.eth-label { border-color: rgba(74,158,255,0.6); color: var(--eth-color);   background: rgba(13,17,23,0.92); }
+  .cable-label-input.off-label { border-color: var(--border); color: var(--text-dim); background: rgba(13,17,23,0.92); opacity: 0.5; }
+  .cable-label-input:focus { outline: none; width: 72px; }
+  .cable-label-input.pwr-label:focus { border-color: var(--power-color); }
+  .cable-label-input.eth-label:focus { border-color: var(--eth-color); }
+  .cable-label-input::placeholder { color: var(--text-dim); font-style: italic; opacity: 0.6; }
+
   /* ── MODULE CARD ── */
   .module-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    width: 300px; flex-shrink: 0;
-    position: relative;
-    animation: fadeIn 0.2s ease;
+    background: var(--surface); border: 1px solid var(--border);
+    width: 300px; flex-shrink: 0; position: relative;
+    animation: fadeIn 0.2s ease; transition: box-shadow 0.2s, border-color 0.2s;
+    cursor: pointer;
   }
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateX(-6px); }
-    to   { opacity: 1; transform: translateX(0); }
-  }
+  .module-card:hover { box-shadow: 0 0 0 1px var(--accent); }
   .module-card::before {
     content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-    background: linear-gradient(90deg, var(--accent), transparent);
+    background: linear-gradient(90deg,var(--accent),transparent);
+    transition: background 0.2s;
   }
+  /* Status variants */
+  .module-card.status-online::before  { background: linear-gradient(90deg,var(--online-color),transparent); }
+  .module-card.status-offline::before { background: linear-gradient(90deg,var(--offline-color),transparent); }
+  .module-card.status-fault::before   { background: linear-gradient(90deg,var(--fault-color),transparent); }
+  .module-card.status-fault  { border-color: rgba(255,71,87,0.5); box-shadow: 0 0 12px rgba(255,71,87,0.15); }
+  .module-card.status-online { border-color: rgba(0,212,170,0.35); }
+
+  /* Search highlight */
+  .module-card.search-match { box-shadow: 0 0 0 2px var(--accent); }
+  .module-card.search-no-match { opacity: 0.2; filter: saturate(0.2); }
+
+  @keyframes fadeIn { from { opacity:0; transform:translateX(-6px); } to { opacity:1; transform:translateX(0); } }
 
   /* Module header */
   .module-header {
-    display: flex; align-items: center; padding: 8px 11px; gap: 7px;
+    display: flex; align-items: center; padding: 7px 10px; gap: 6px;
     border-bottom: 1px solid var(--border); background: var(--surface2);
   }
   .module-id { font-family: var(--mono); font-size: 9px; color: var(--text-dim); flex-shrink: 0; }
   .module-name-input {
     background: transparent; border: none; border-bottom: 1px dashed var(--border);
     color: var(--text); font-family: var(--mono); font-size: 12px; font-weight: 600;
-    flex: 1; padding: 1px 3px; letter-spacing: 1px; text-transform: uppercase;
-    min-width: 0;
+    flex: 1; padding: 1px 3px; letter-spacing: 1px; text-transform: uppercase; min-width: 0;
   }
   .module-name-input:focus { outline: none; border-bottom-color: var(--accent); color: var(--accent); }
+
+  /* Status + fault controls in header */
+  .module-status-controls { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+
+  .status-btn {
+    font-family: var(--mono); font-size: 8px; padding: 2px 5px;
+    border: 1px solid; cursor: pointer; text-transform: uppercase;
+    letter-spacing: 0.5px; transition: all 0.15s; background: transparent;
+  }
+  .status-btn.online-btn  { border-color: rgba(0,212,170,0.4); color: var(--text-dim); }
+  .status-btn.online-btn.active  { border-color: var(--online-color); color: var(--online-color); background: rgba(0,212,170,0.1); }
+  .status-btn.offline-btn { border-color: rgba(139,148,158,0.4); color: var(--text-dim); }
+  .status-btn.offline-btn.active { border-color: var(--offline-color); color: var(--offline-color); background: rgba(139,148,158,0.1); }
+  .status-btn.fault-btn   { border-color: rgba(255,71,87,0.4); color: var(--text-dim); }
+  .status-btn.fault-btn.active   { border-color: var(--fault-color); color: var(--fault-color); background: rgba(255,71,87,0.1); }
+
+  /* Fault pulse animation */
+  @keyframes faultPulse {
+    0%,100% { box-shadow: 0 0 12px rgba(255,71,87,0.15); }
+    50%      { box-shadow: 0 0 20px rgba(255,71,87,0.35); }
+  }
+  .module-card.status-fault { animation: faultPulse 2s ease-in-out infinite; }
+
   .module-delete {
     background: none; border: none; color: var(--text-dim); cursor: pointer;
     font-size: 12px; padding: 1px 3px; transition: color 0.15s; flex-shrink: 0;
   }
   .module-delete:hover { color: var(--danger); }
 
-  /* IP address bar */
+  /* IP bar */
   .module-ip-bar {
-    display: flex; align-items: center; gap: 7px;
-    padding: 5px 11px; border-bottom: 1px solid var(--border);
-    background: rgba(74,158,255,0.04);
+    display: flex; align-items: center; gap: 6px; padding: 4px 10px;
+    border-bottom: 1px solid var(--border); background: rgba(74,158,255,0.04);
   }
   .ip-label { font-family: var(--mono); font-size: 9px; color: var(--eth-color); text-transform: uppercase; letter-spacing: 1px; flex-shrink: 0; }
   .ip-input {
-    font-family: var(--mono); font-size: 11px;
-    background: transparent; border: none; border-bottom: 1px dashed rgba(74,158,255,0.3);
+    font-family: var(--mono); font-size: 11px; background: transparent;
+    border: none; border-bottom: 1px dashed rgba(74,158,255,0.3);
     color: var(--text); padding: 1px 3px; flex: 1; min-width: 0;
   }
   .ip-input:focus { outline: none; border-bottom-color: var(--eth-color); color: var(--eth-color); }
   .ip-input::placeholder { color: var(--text-dim); }
 
-  /* Connection ports */
+  /* Zoom hint on IP bar right */
+  .zoom-hint {
+    font-family: var(--mono); font-size: 8px; color: var(--text-dim);
+    border: 1px dashed var(--border); padding: 1px 5px; flex-shrink: 0;
+    opacity: 0.6; pointer-events: none;
+  }
+
+  /* Conn ports */
   .conn-ports { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--border); }
-  .conn-group { padding: 7px 9px; border-right: 1px solid var(--border); display: flex; flex-direction: column; gap: 4px; }
+  .conn-group { padding: 6px 9px; border-right: 1px solid var(--border); display: flex; flex-direction: column; gap: 4px; }
   .conn-group:last-child { border-right: none; }
   .conn-group-title { font-family: var(--mono); font-size: 8px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; }
   .conn-group-title.pwr { color: var(--power-color); }
@@ -324,7 +323,7 @@
   .jumper-lbl.on { color: var(--accent); }
 
   /* IO Ports */
-  .io-ports { padding: 6px; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+  .io-ports { padding: 5px; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
   .io-port { border: 1px solid var(--border); padding: 5px 6px; position: relative; transition: border-color 0.15s; }
   .io-port.t-input   { border-left: 3px solid var(--info); }
   .io-port.t-output  { border-left: 3px solid var(--accent2); }
@@ -350,16 +349,170 @@
     color: var(--accent); padding: 2px 3px; flex: 1; cursor: pointer;
   }
   .port-name-input {
-    font-family: var(--mono); font-size: 9px;
-    background: transparent; border: none; border-bottom: 1px dashed var(--border);
+    font-family: var(--mono); font-size: 9px; background: transparent;
+    border: none; border-bottom: 1px dashed var(--border);
     color: var(--text); padding: 1px 2px; width: 100%;
   }
   .port-name-input:focus { outline: none; border-bottom-color: var(--accent); color: var(--accent); }
   .port-name-input::placeholder { color: var(--text-dim); font-style: italic; }
+
+  /* Search highlight on port */
+  .io-port.search-match-port { border-color: var(--accent) !important; background: rgba(240,165,0,0.06); }
+
+  /* ── ZOOM MODAL ── */
+  .zoom-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.82);
+    z-index: 1000; display: flex; align-items: center; justify-content: center;
+    padding: 24px; animation: overlayIn 0.15s ease;
+  }
+  @keyframes overlayIn { from { opacity:0; } to { opacity:1; } }
+
+  .zoom-modal {
+    background: var(--surface); border: 1px solid var(--border);
+    max-width: 640px; width: 100%; max-height: 90vh; overflow-y: auto;
+    position: relative; animation: modalIn 0.18s ease;
+    box-shadow: 0 0 60px rgba(0,0,0,0.6);
+  }
+  @keyframes modalIn { from { transform: scale(0.94); opacity:0; } to { transform: scale(1); opacity:1; } }
+
+  .zoom-modal::before {
+    content: ''; position: sticky; top: 0; left: 0; right: 0; height: 2px; display: block;
+    background: linear-gradient(90deg,var(--accent),transparent); z-index: 2;
+  }
+  .zoom-modal-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 16px; border-bottom: 1px solid var(--border);
+    background: var(--surface2); position: sticky; top: 2px; z-index: 1;
+  }
+  .zoom-modal-title { font-family: var(--mono); font-size: 13px; color: var(--accent); text-transform: uppercase; letter-spacing: 2px; }
+  .zoom-close {
+    background: none; border: 1px solid var(--border); color: var(--text-dim);
+    cursor: pointer; font-size: 14px; padding: 3px 8px; transition: all 0.15s; font-family: var(--mono);
+  }
+  .zoom-close:hover { border-color: var(--danger); color: var(--danger); }
+
+  .zoom-status-row {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 16px; border-bottom: 1px solid var(--border);
+    background: rgba(0,0,0,0.2);
+  }
+  .zoom-status-label { font-family: var(--mono); font-size: 9px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+
+  .zoom-status-btn {
+    font-family: var(--mono); font-size: 10px; padding: 4px 12px;
+    border: 1px solid; cursor: pointer; text-transform: uppercase;
+    letter-spacing: 1px; transition: all 0.15s; background: transparent;
+  }
+  .zoom-status-btn.online-btn  { border-color: rgba(0,212,170,0.4); color: var(--text-dim); }
+  .zoom-status-btn.online-btn.active  { border-color: var(--online-color); color: var(--online-color); background: rgba(0,212,170,0.12); }
+  .zoom-status-btn.offline-btn { border-color: rgba(139,148,158,0.4); color: var(--text-dim); }
+  .zoom-status-btn.offline-btn.active { border-color: var(--offline-color); color: var(--offline-color); background: rgba(139,148,158,0.12); }
+  .zoom-status-btn.fault-btn   { border-color: rgba(255,71,87,0.4); color: var(--text-dim); }
+  .zoom-status-btn.fault-btn.active   { border-color: var(--fault-color); color: var(--fault-color); background: rgba(255,71,87,0.12); }
+
+  .zoom-fault-banner {
+    background: rgba(255,71,87,0.12); border-bottom: 1px solid rgba(255,71,87,0.3);
+    padding: 6px 16px; font-family: var(--mono); font-size: 10px; color: var(--fault-color);
+    text-transform: uppercase; letter-spacing: 1px; display: none;
+  }
+  .zoom-fault-banner.visible { display: flex; align-items: center; gap: 8px; }
+  .fault-pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--fault-color); animation: dotPulse 1s ease-in-out infinite; }
+  @keyframes dotPulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+  .zoom-info-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .zoom-field {
+    padding: 8px 16px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  }
+  .zoom-field:nth-child(2n) { border-right: none; }
+  .zoom-field label { font-family: var(--mono); font-size: 9px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 3px; }
+  .zoom-field input {
+    font-family: var(--mono); font-size: 12px; background: transparent;
+    border: none; border-bottom: 1px dashed var(--border); color: var(--text);
+    padding: 2px 3px; width: 100%;
+  }
+  .zoom-field input:focus { outline: none; border-bottom-color: var(--accent); color: var(--accent); }
+
+  .zoom-ports-title {
+    padding: 10px 16px 6px; font-family: var(--mono); font-size: 9px;
+    color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px;
+    border-bottom: 1px solid var(--border);
+  }
+  .zoom-ports-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 10px 16px 16px; }
+
+  .zoom-port {
+    border: 1px solid var(--border); padding: 10px;
+  }
+  .zoom-port.t-input  { border-left: 3px solid var(--info); }
+  .zoom-port.t-output { border-left: 3px solid var(--accent2); }
+  .zoom-port.t-iolink { border-left: 3px solid var(--accent); }
+
+  .zoom-port-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+  .zoom-port-num { font-family: var(--mono); font-size: 10px; color: var(--text-dim); text-transform: uppercase; }
+  .zoom-port-dot { width: 7px; height: 7px; border-radius: 50%; }
+  .zoom-port.t-input  .zoom-port-dot { background: var(--info);    box-shadow: 0 0 5px var(--info); }
+  .zoom-port.t-output .zoom-port-dot { background: var(--accent2); box-shadow: 0 0 5px var(--accent2); }
+  .zoom-port.t-iolink .zoom-port-dot { background: var(--accent);  box-shadow: 0 0 5px var(--accent); }
+
+  .zoom-port select {
+    font-family: var(--mono); font-size: 10px; background: var(--surface2);
+    border: 1px solid var(--border); color: var(--text); padding: 3px 4px; width: 100%; margin-bottom: 5px; cursor: pointer;
+  }
+  .zoom-port .dev-select {
+    background: rgba(240,165,0,0.07); border: 1px solid rgba(240,165,0,0.3); color: var(--accent);
+  }
+  .zoom-port-device-row { display: flex; align-items: center; gap: 6px; margin-bottom: 5px; }
+  .zoom-port-icon { width: 26px; height: 26px; flex-shrink: 0; }
+  .zoom-port input[type="text"] {
+    font-family: var(--mono); font-size: 11px; background: transparent;
+    border: none; border-bottom: 1px dashed var(--border); color: var(--text);
+    padding: 2px 2px; width: 100%;
+  }
+  .zoom-port input[type="text"]:focus { outline: none; border-bottom-color: var(--accent); color: var(--accent); }
+  .zoom-port input[type="text"]::placeholder { color: var(--text-dim); font-style: italic; }
+
+  /* ── PRINT STYLES ── */
+  @media print {
+    body { background: #fff !important; color: #111 !important; }
+    body::before { display: none; }
+    header { background: #fff !important; border-bottom: 2px solid #111 !important; position: static !important; }
+    .header-controls, .search-wrap, .panel-bar-hint, .add-to-row-btn, .add-row-btn, .zoom-hint, .module-delete { display: none !important; }
+    main { padding: 8px !important; gap: 8px !important; overflow: visible !important; }
+    .legend { background: #f5f5f5 !important; border-color: #ccc !important; }
+    .legend-title,.legend-item { color: #444 !important; }
+    .panel-bar { background: #f5f5f5 !important; border-color: #ccc !important; }
+    .panel-bar-label { color: #666 !important; }
+    #canvas { gap: 10px !important; }
+    .chain-row { break-inside: avoid; }
+    .module-card { background: #fff !important; border: 1px solid #bbb !important; box-shadow: none !important; animation: none !important; cursor: default !important; }
+    .module-card::before { display: none !important; }
+    .module-card.status-fault  { border: 2px solid var(--fault-color) !important; }
+    .module-card.status-online { border: 2px solid var(--online-color) !important; }
+    .module-header { background: #f0f0f0 !important; border-bottom-color: #ccc !important; }
+    .module-id,.module-name-input,.port-name-editable,.ip-label,.conn-group-title,.port-number,.port-badge,.jumper-lbl { color: #111 !important; }
+    .module-name-input { border-bottom: none !important; }
+    .module-ip-bar { background: #f5faff !important; }
+    .ip-input { border-bottom-color: #aac !important; color: #224 !important; }
+    .conn-line.off { opacity: 0.25 !important; }
+    .io-port { background: #fff !important; border-color: #ccc !important; }
+    .port-type-select, .port-device-select, .port-name-input { color: #111 !important; background: #fff !important; border-color: #ccc !important; }
+    .cable-label-input { background: #fff !important; color: #222 !important; }
+    .zoom-overlay { display: none !important; }
+    .panel-stub::after { color: #555 !important; }
+    .status-btn { border-color: #ccc !important; }
+    .status-btn.active.online-btn  { border-color: var(--online-color) !important; color: var(--online-color) !important; background: none !important; }
+    .status-btn.active.offline-btn { border-color: #888 !important; color: #888 !important; background: none !important; }
+    .status-btn.active.fault-btn   { border-color: var(--fault-color) !important; color: var(--fault-color) !important; background: none !important; }
+    .logo-mark { background: #111 !important; color: #fff !important; }
+    header h1 { color: #111 !important; }
+  }
 </style>
 </head>
 <body>
 <div id="app">
+
   <header>
     <div class="header-brand">
       <div class="logo-mark">IOL</div>
@@ -369,14 +522,20 @@
       </div>
     </div>
     <div class="header-controls">
+      <!-- Search -->
+      <div class="search-wrap">
+        <span class="search-icon">⌕</span>
+        <input class="search-input" id="search-input" placeholder="Search modules, IPs, cables…" oninput="handleSearch(this.value)">
+        <button class="search-clear" id="search-clear" onclick="clearSearch()">✕</button>
+      </div>
       <button class="btn primary" onclick="addChainRow()">+ New Panel Feed</button>
+      <button class="btn pdf-btn" onclick="printDiagram()">⎙ Print / PDF</button>
       <button class="btn" onclick="saveLayout()">Export JSON</button>
       <button class="btn" onclick="importLayout()">Import JSON</button>
     </div>
   </header>
 
   <main>
-    <!-- Legend -->
     <div class="legend">
       <span class="legend-title">Legend:</span>
       <span class="legend-item"><span class="legend-dot" style="background:#4a9eff;box-shadow:0 0 4px #4a9eff"></span>Input</span>
@@ -384,85 +543,82 @@
       <span class="legend-item"><span class="legend-dot" style="background:#f0a500;box-shadow:0 0 4px #f0a500"></span>IO-Link</span>
       <span class="legend-item"><span class="legend-dash" style="border-color:#ff6b35"></span>Power</span>
       <span class="legend-item"><span class="legend-dash" style="border-color:#4a9eff"></span>Ethernet</span>
-      <span class="legend-item" style="margin-left:auto;font-size:9px;color:var(--text-dim);">Each row = one panel feed &nbsp;|&nbsp; Port 1 IN → Port 2 OUT → next &nbsp;|&nbsp; Type on cable lines to label wires</span>
+      <span class="legend-item"><span class="legend-sq" style="border-color:var(--online-color);background:rgba(0,212,170,0.1)"></span><span style="color:var(--online-color)">Online</span></span>
+      <span class="legend-item"><span class="legend-sq" style="border-color:#8b949e;background:rgba(139,148,158,0.1)"></span>Offline</span>
+      <span class="legend-item"><span class="legend-sq" style="border-color:var(--fault-color);background:rgba(255,71,87,0.1)"></span><span style="color:var(--fault-color)">Fault</span></span>
+      <span class="legend-item" style="margin-left:auto;font-size:9px;color:var(--text-dim);">Click a module to zoom in &nbsp;|&nbsp; Port 1=IN · Port 2=OUT(jumper)</span>
     </div>
 
-    <!-- Panel source names -->
     <div class="panel-bar">
       <span class="panel-bar-label">Panel sources:</span>
-      <div style="display:flex;align-items:center;gap:6px;">
-        <span style="font-family:var(--mono);font-size:9px;color:var(--power-color);text-transform:uppercase;">⚡</span>
+      <div style="display:flex;align-items:center;gap:5px;">
+        <span style="font-family:var(--mono);font-size:9px;color:var(--power-color);">⚡</span>
         <span class="editable-badge pwr" id="panel-pwr" title="Click to rename" onclick="renameBadge('panel-pwr')">PANEL</span>
       </div>
-      <div style="display:flex;align-items:center;gap:6px;">
-        <span style="font-family:var(--mono);font-size:9px;color:var(--eth-color);text-transform:uppercase;">⬡</span>
+      <div style="display:flex;align-items:center;gap:5px;">
+        <span style="font-family:var(--mono);font-size:9px;color:var(--eth-color);">⬡</span>
         <span class="editable-badge eth" id="panel-eth" title="Click to rename" onclick="renameBadge('panel-eth')">SWITCH</span>
       </div>
       <span class="panel-bar-hint">Click labels to rename</span>
     </div>
 
-    <!-- Canvas: rows -->
     <div id="canvas"></div>
   </main>
+
+  <!-- Zoom Modal (rendered here, populated by JS) -->
+  <div class="zoom-overlay" id="zoom-overlay" style="display:none;" onclick="handleOverlayClick(event)">
+    <div class="zoom-modal" id="zoom-modal"></div>
+  </div>
 </div>
 
 <script>
-// Data model: array of "chains" (rows), each chain is an array of modules
 let chains = [];
 let moduleIdCounter = 0;
+let zoomedModId = null;
 
-const DEVICE_TYPES = ['None', 'Touch Button Light', 'Rail & Status Light', 'RFID Sensor'];
-const PORT_TYPES   = ['Input', 'Output', 'IO-Link'];
+const DEVICE_TYPES = ['None','Touch Button Light','Rail & Status Light','RFID Sensor'];
+const PORT_TYPES   = ['Input','Output','IO-Link'];
+const STATUS_TYPES = ['none','online','offline','fault'];
 
 const DEVICE_ICONS = {
   'None': `<svg viewBox="0 0 24 24" fill="none" stroke="#8b949e" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="9"/><line x1="9" y1="12" x2="15" y2="12"/></svg>`,
   'Touch Button Light': `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="9" r="5" fill="rgba(240,165,0,0.12)" stroke="#f0a500" stroke-width="1.5"/><circle cx="12" cy="9" r="2.5" fill="#f0a500"/><path d="M9 16 Q12 13.5 15 16" stroke="#f0a500" stroke-width="1.5" fill="none" stroke-linecap="round"/><line x1="12" y1="14" x2="12" y2="16" stroke="#f0a500" stroke-width="1.5"/><line x1="9.5" y1="19" x2="14.5" y2="19" stroke="#f0a500" stroke-width="1.5" stroke-linecap="round"/></svg>`,
   'Rail & Status Light': `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="9" width="20" height="7" rx="1.5" fill="rgba(0,212,170,0.08)" stroke="#00d4aa" stroke-width="1.2"/><circle cx="6.5" cy="12.5" r="2" fill="#00d4aa"/><circle cx="12" cy="12.5" r="2" fill="#f0a500"/><circle cx="17.5" cy="12.5" r="2" fill="#ff4757"/><line x1="2" y1="7" x2="22" y2="7" stroke="#00d4aa" stroke-width="1.8" stroke-linecap="round"/><line x1="2" y1="18" x2="22" y2="18" stroke="#00d4aa" stroke-width="1.8" stroke-linecap="round"/></svg>`,
-  'RFID Sensor': `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="8" width="8" height="8" rx="1.5" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" stroke-width="1.2"/><circle cx="12" cy="12" r="1.8" fill="#4a9eff"/><path d="M5.5 7.5 Q5.5 3 12 3 Q18.5 3 18.5 7.5" stroke="#4a9eff" stroke-width="1.2" fill="none" opacity="0.5"/><path d="M5.5 16.5 Q5.5 21 12 21 Q18.5 21 18.5 16.5" stroke="#4a9eff" stroke-width="1.2" fill="none" opacity="0.5"/><path d="M3 10 Q3 5.5 12 5.5 Q21 5.5 21 10" stroke="#4a9eff" stroke-width="1" fill="none" opacity="0.3" stroke-dasharray="2 1.5"/><path d="M3 14 Q3 18.5 12 18.5 Q21 18.5 21 14" stroke="#4a9eff" stroke-width="1" fill="none" opacity="0.3" stroke-dasharray="2 1.5"/></svg>`
+  'RFID Sensor': `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="8" width="8" height="8" rx="1.5" fill="rgba(74,158,255,0.12)" stroke="#4a9eff" stroke-width="1.2"/><circle cx="12" cy="12" r="1.8" fill="#4a9eff"/><path d="M5.5 7.5 Q5.5 3 12 3 Q18.5 3 18.5 7.5" stroke="#4a9eff" stroke-width="1.2" fill="none" opacity="0.5"/><path d="M5.5 16.5 Q5.5 21 12 21 Q18.5 21 18.5 16.5" stroke="#4a9eff" stroke-width="1.2" fill="none" opacity="0.5"/></svg>`
 };
 
+/* ── DATA MODEL ── */
 function createModule() {
   moduleIdCounter++;
   return {
     id: moduleIdCounter,
     name: `Module ${moduleIdCounter}`,
     ip: '',
+    status: 'none', // 'none' | 'online' | 'offline' | 'fault'
     pwrCableLabel: '',
     ethCableLabel: '',
-    pwr1Name: 'PWR IN',
-    pwr2Name: 'PWR OUT',
-    pwr2Jumpered: false,
-    eth1Name: 'ETH IN',
-    eth2Name: 'ETH OUT',
-    eth2Jumpered: false,
-    ports: Array.from({length: 8}, (_, i) => ({
-      number: i + 1,
-      type: 'Input',
-      device: 'None',
-      name: ''
-    }))
+    pwr1Name: 'PWR IN',  pwr2Name: 'PWR OUT', pwr2Jumpered: false,
+    eth1Name: 'ETH IN',  eth2Name: 'ETH OUT', eth2Jumpered: false,
+    ports: Array.from({length:8},(_,i) => ({ number:i+1, type:'Input', device:'None', name:'' }))
   };
 }
-
-function createChain() {
-  return { id: Date.now(), modules: [createModule()] };
-}
+function createChain() { return { id: Date.now(), modules: [createModule()] }; }
 
 /* ── RENDER ── */
 function renderAll() {
   const canvas = document.getElementById('canvas');
   canvas.innerHTML = '';
+  chains.forEach(chain => canvas.appendChild(buildChainRow(chain)));
 
-  chains.forEach(chain => {
-    canvas.appendChild(buildChainRow(chain));
-  });
+  const addBtn = document.createElement('button');
+  addBtn.className = 'add-row-btn';
+  addBtn.innerHTML = `<span style="font-size:18px">+</span> New Panel Feed`;
+  addBtn.onclick = addChainRow;
+  canvas.appendChild(addBtn);
 
-  // "Add new panel feed" button at bottom
-  const addRowBtn = document.createElement('button');
-  addRowBtn.className = 'add-row-btn';
-  addRowBtn.innerHTML = `<span style="font-size:18px">+</span> New Panel Feed`;
-  addRowBtn.onclick = addChainRow;
-  canvas.appendChild(addRowBtn);
+  // Re-apply search if active
+  const q = document.getElementById('search-input').value.trim();
+  if (q) applySearch(q);
 }
 
 function buildChainRow(chain) {
@@ -470,57 +626,33 @@ function buildChainRow(chain) {
   row.className = 'chain-row';
   row.dataset.chainId = chain.id;
 
-  // Panel stub on the left — shows the first module's cable labels
-  const firstMod = chain.modules[0];
-  row.appendChild(buildPanelStub(firstMod));
+  row.appendChild(buildPanelStub());
 
-  // Modules with connectors between them
   chain.modules.forEach((mod, idx) => {
-    if (idx === 0) {
-      // First connector from panel stub: labels belong to mod (incoming cable)
-      row.appendChild(buildConnector(true, true, mod));
-    } else {
-      const prev = chain.modules[idx - 1];
-      // Cable labels live on the destination module (incoming side)
-      row.appendChild(buildConnector(prev.pwr2Jumpered, prev.eth2Jumpered, mod));
-    }
+    const pwrOn = idx === 0 ? true : chain.modules[idx-1].pwr2Jumpered;
+    const ethOn = idx === 0 ? true : chain.modules[idx-1].eth2Jumpered;
+    row.appendChild(buildConnector(pwrOn, ethOn, mod));
     row.appendChild(buildModuleCard(mod, chain));
   });
 
-  // Add module button at end of row
   const addBtn = document.createElement('button');
   addBtn.className = 'add-to-row-btn';
   addBtn.title = 'Add module to this row';
   addBtn.textContent = '+';
-  addBtn.onclick = () => {
-    chain.modules.push(createModule());
-    renderAll();
-  };
+  addBtn.onclick = () => { chain.modules.push(createModule()); renderAll(); };
   row.appendChild(addBtn);
-
   return row;
 }
 
-function buildPanelStub(firstMod) {
+function buildPanelStub() {
   const stub = document.createElement('div');
   stub.className = 'panel-stub';
-
-  // Power line + label
-  const pwrSlot = document.createElement('div');
-  pwrSlot.className = 'cable-slot';
-  const pwrLine = document.createElement('div');
-  pwrLine.className = 'stub-line pwr';
-  pwrSlot.appendChild(pwrLine);
-  stub.appendChild(pwrSlot);
-
-  // Eth line + label
-  const ethSlot = document.createElement('div');
-  ethSlot.className = 'cable-slot';
-  const ethLine = document.createElement('div');
-  ethLine.className = 'stub-line eth';
-  ethSlot.appendChild(ethLine);
-  stub.appendChild(ethSlot);
-
+  const pwrSlot = document.createElement('div'); pwrSlot.className = 'cable-slot';
+  const pwrLine = document.createElement('div'); pwrLine.className = 'stub-line pwr';
+  pwrSlot.appendChild(pwrLine); stub.appendChild(pwrSlot);
+  const ethSlot = document.createElement('div'); ethSlot.className = 'cable-slot';
+  const ethLine = document.createElement('div'); ethLine.className = 'stub-line eth';
+  ethSlot.appendChild(ethLine); stub.appendChild(ethSlot);
   return stub;
 }
 
@@ -528,46 +660,26 @@ function buildConnector(pwrOn, ethOn, mod) {
   const wrap = document.createElement('div');
   wrap.className = 'chain-connector';
 
-  // Power cable slot
-  const pwrSlot = document.createElement('div');
-  pwrSlot.className = 'cable-slot';
-
-  const pwrLine = document.createElement('div');
-  pwrLine.className = `conn-line ${pwrOn ? 'pwr-on' : 'off'}`;
-  pwrSlot.appendChild(pwrLine);
-
-  // Power cable label tag
-  const pwrLabelWrap = document.createElement('div');
-  pwrLabelWrap.className = 'cable-label-wrap';
-  const pwrLabelInp = document.createElement('input');
-  pwrLabelInp.className = `cable-label-input ${pwrOn ? 'pwr-label' : 'off-label'}`;
-  pwrLabelInp.placeholder = 'PWR cable…';
-  pwrLabelInp.value = mod ? (mod.pwrCableLabel || '') : '';
-  pwrLabelInp.title = 'Cable label';
-  if (mod) pwrLabelInp.oninput = e => { mod.pwrCableLabel = e.target.value; };
-  pwrLabelWrap.appendChild(pwrLabelInp);
-  pwrSlot.appendChild(pwrLabelWrap);
+  // Power cable
+  const pwrSlot = document.createElement('div'); pwrSlot.className = 'cable-slot';
+  const pwrLine = document.createElement('div'); pwrLine.className = `conn-line ${pwrOn?'pwr-on':'off'}`;
+  const pwrWrap = document.createElement('div'); pwrWrap.className = 'cable-label-wrap';
+  const pwrInp  = document.createElement('input');
+  pwrInp.className = `cable-label-input ${pwrOn?'pwr-label':'off-label'}`;
+  pwrInp.placeholder = 'PWR cable…'; pwrInp.value = mod?.pwrCableLabel||''; pwrInp.title='Cable label';
+  if (mod) pwrInp.oninput = e => { mod.pwrCableLabel = e.target.value; };
+  pwrWrap.appendChild(pwrInp); pwrSlot.appendChild(pwrLine); pwrSlot.appendChild(pwrWrap);
   wrap.appendChild(pwrSlot);
 
-  // Ethernet cable slot
-  const ethSlot = document.createElement('div');
-  ethSlot.className = 'cable-slot';
-
-  const ethLine = document.createElement('div');
-  ethLine.className = `conn-line ${ethOn ? 'eth-on' : 'off'}`;
-  ethSlot.appendChild(ethLine);
-
-  // Ethernet cable label tag
-  const ethLabelWrap = document.createElement('div');
-  ethLabelWrap.className = 'cable-label-wrap';
-  const ethLabelInp = document.createElement('input');
-  ethLabelInp.className = `cable-label-input ${ethOn ? 'eth-label' : 'off-label'}`;
-  ethLabelInp.placeholder = 'ETH cable…';
-  ethLabelInp.value = mod ? (mod.ethCableLabel || '') : '';
-  ethLabelInp.title = 'Cable label';
-  if (mod) ethLabelInp.oninput = e => { mod.ethCableLabel = e.target.value; };
-  ethLabelWrap.appendChild(ethLabelInp);
-  ethSlot.appendChild(ethLabelWrap);
+  // Ethernet cable
+  const ethSlot = document.createElement('div'); ethSlot.className = 'cable-slot';
+  const ethLine = document.createElement('div'); ethLine.className = `conn-line ${ethOn?'eth-on':'off'}`;
+  const ethWrap = document.createElement('div'); ethWrap.className = 'cable-label-wrap';
+  const ethInp  = document.createElement('input');
+  ethInp.className = `cable-label-input ${ethOn?'eth-label':'off-label'}`;
+  ethInp.placeholder = 'ETH cable…'; ethInp.value = mod?.ethCableLabel||''; ethInp.title='Cable label';
+  if (mod) ethInp.oninput = e => { mod.ethCableLabel = e.target.value; };
+  ethWrap.appendChild(ethInp); ethSlot.appendChild(ethLine); ethSlot.appendChild(ethWrap);
   wrap.appendChild(ethSlot);
 
   return wrap;
@@ -575,8 +687,14 @@ function buildConnector(pwrOn, ethOn, mod) {
 
 function buildModuleCard(mod, chain) {
   const card = document.createElement('div');
-  card.className = 'module-card';
+  card.className = `module-card${mod.status!=='none'?' status-'+mod.status:''}`;
   card.dataset.modId = mod.id;
+
+  // Click to zoom (but not on interactive children)
+  card.addEventListener('click', e => {
+    if (e.target.closest('input,select,button,.port-name-editable')) return;
+    openZoom(mod.id);
+  });
 
   // ── Header
   const hdr = document.createElement('div');
@@ -588,52 +706,56 @@ function buildModuleCard(mod, chain) {
 
   const nameInp = document.createElement('input');
   nameInp.className = 'module-name-input';
-  nameInp.value = mod.name;
-  nameInp.placeholder = 'Module name...';
+  nameInp.value = mod.name; nameInp.placeholder = 'Module name…';
   nameInp.oninput = e => { mod.name = e.target.value; };
 
+  // Status buttons
+  const statusCtrl = document.createElement('div');
+  statusCtrl.className = 'module-status-controls';
+
+  [['online','●'],['offline','○'],['fault','⚠']].forEach(([s, icon]) => {
+    const btn = document.createElement('button');
+    btn.className = `status-btn ${s}-btn${mod.status===s?' active':''}`;
+    btn.title = s.charAt(0).toUpperCase()+s.slice(1);
+    btn.textContent = icon;
+    btn.onclick = e => {
+      e.stopPropagation();
+      mod.status = mod.status === s ? 'none' : s;
+      renderAll();
+    };
+    statusCtrl.appendChild(btn);
+  });
+
   const delBtn = document.createElement('button');
-  delBtn.className = 'module-delete';
-  delBtn.innerHTML = '✕';
-  delBtn.title = 'Remove module';
-  delBtn.onclick = () => {
-    chain.modules = chain.modules.filter(m => m.id !== mod.id);
-    if (chain.modules.length === 0) {
-      chains = chains.filter(c => c.id !== chain.id);
-    }
+  delBtn.className = 'module-delete'; delBtn.innerHTML = '✕'; delBtn.title = 'Remove module';
+  delBtn.onclick = e => {
+    e.stopPropagation();
+    chain.modules = chain.modules.filter(m=>m.id!==mod.id);
+    if (chain.modules.length===0) chains = chains.filter(c=>c.id!==chain.id);
     renderAll();
   };
 
-  hdr.appendChild(idSpan);
-  hdr.appendChild(nameInp);
-  hdr.appendChild(delBtn);
+  hdr.appendChild(idSpan); hdr.appendChild(nameInp); hdr.appendChild(statusCtrl); hdr.appendChild(delBtn);
   card.appendChild(hdr);
 
-  // ── IP Address bar
-  const ipBar = document.createElement('div');
-  ipBar.className = 'module-ip-bar';
-  const ipLbl = document.createElement('span');
-  ipLbl.className = 'ip-label';
-  ipLbl.textContent = '⬡ IP:';
-  const ipInp = document.createElement('input');
-  ipInp.className = 'ip-input';
-  ipInp.value = mod.ip;
-  ipInp.placeholder = '192.168.1.___';
+  // ── IP bar
+  const ipBar = document.createElement('div'); ipBar.className = 'module-ip-bar';
+  const ipLbl = document.createElement('span'); ipLbl.className = 'ip-label'; ipLbl.textContent = '⬡ IP:';
+  const ipInp = document.createElement('input'); ipInp.className = 'ip-input';
+  ipInp.value = mod.ip; ipInp.placeholder = '192.168.1.___';
   ipInp.oninput = e => { mod.ip = e.target.value; };
-  ipBar.appendChild(ipLbl);
-  ipBar.appendChild(ipInp);
+  const zoomHint = document.createElement('span'); zoomHint.className = 'zoom-hint'; zoomHint.textContent = 'click to zoom';
+  ipBar.appendChild(ipLbl); ipBar.appendChild(ipInp); ipBar.appendChild(zoomHint);
   card.appendChild(ipBar);
 
-  // ── Conn ports (power + eth)
-  const connPorts = document.createElement('div');
-  connPorts.className = 'conn-ports';
-  connPorts.appendChild(buildConnGroup(mod, 'pwr'));
-  connPorts.appendChild(buildConnGroup(mod, 'eth'));
+  // ── Conn ports
+  const connPorts = document.createElement('div'); connPorts.className = 'conn-ports';
+  connPorts.appendChild(buildConnGroup(mod,'pwr'));
+  connPorts.appendChild(buildConnGroup(mod,'eth'));
   card.appendChild(connPorts);
 
   // ── IO Ports
-  const ioSection = document.createElement('div');
-  ioSection.className = 'io-ports';
+  const ioSection = document.createElement('div'); ioSection.className = 'io-ports';
   mod.ports.forEach(port => ioSection.appendChild(buildIOPort(port)));
   card.appendChild(ioSection);
 
@@ -641,162 +763,307 @@ function buildModuleCard(mod, chain) {
 }
 
 function buildConnGroup(mod, type) {
-  const isPwr = type === 'pwr';
-  const group = document.createElement('div');
-  group.className = 'conn-group';
-
+  const isPwr = type==='pwr';
+  const group = document.createElement('div'); group.className='conn-group';
   const title = document.createElement('div');
-  title.className = `conn-group-title ${type}`;
-  title.textContent = isPwr ? '⚡ Power' : '⬡ Ethernet';
+  title.className=`conn-group-title ${type}`; title.textContent=isPwr?'⚡ Power':'⬡ Ethernet';
   group.appendChild(title);
 
-  // Port 1 IN
-  const row1 = document.createElement('div');
-  row1.className = 'port-row';
-  const badge1 = document.createElement('span');
-  badge1.className = `port-badge ${isPwr ? 'p-in' : 'e-in'}`;
-  badge1.textContent = 'P1 IN';
-  const name1Key = isPwr ? 'pwr1Name' : 'eth1Name';
-  const n1 = document.createElement('span');
-  n1.className = 'port-name-editable';
-  n1.textContent = mod[name1Key];
-  n1.title = 'Click to rename';
-  n1.onclick = () => { const v = prompt('Rename:', mod[name1Key]); if (v?.trim()) { mod[name1Key] = v.trim(); renderAll(); } };
-  row1.appendChild(badge1); row1.appendChild(n1);
-  group.appendChild(row1);
+  [[isPwr?'p-in':'e-in','P1 IN',isPwr?'pwr1Name':'eth1Name'],
+   [isPwr?'p-out':'e-out','P2 OUT',isPwr?'pwr2Name':'eth2Name']].forEach(([cls,lbl,key])=>{
+    const row=document.createElement('div'); row.className='port-row';
+    const badge=document.createElement('span'); badge.className=`port-badge ${cls}`; badge.textContent=lbl;
+    const n=document.createElement('span'); n.className='port-name-editable'; n.textContent=mod[key]; n.title='Click to rename';
+    n.onclick=()=>{ const v=prompt('Rename:',mod[key]); if(v?.trim()){mod[key]=v.trim();renderAll();} };
+    row.appendChild(badge); row.appendChild(n); group.appendChild(row);
+  });
 
-  // Port 2 OUT
-  const row2 = document.createElement('div');
-  row2.className = 'port-row';
-  const badge2 = document.createElement('span');
-  badge2.className = `port-badge ${isPwr ? 'p-out' : 'e-out'}`;
-  badge2.textContent = 'P2 OUT';
-  const name2Key = isPwr ? 'pwr2Name' : 'eth2Name';
-  const n2 = document.createElement('span');
-  n2.className = 'port-name-editable';
-  n2.textContent = mod[name2Key];
-  n2.title = 'Click to rename';
-  n2.onclick = () => { const v = prompt('Rename:', mod[name2Key]); if (v?.trim()) { mod[name2Key] = v.trim(); renderAll(); } };
-  row2.appendChild(badge2); row2.appendChild(n2);
-  group.appendChild(row2);
-
-  // Jumper toggle
-  const jumperKey = isPwr ? 'pwr2Jumpered' : 'eth2Jumpered';
-  const jRow = document.createElement('div');
-  jRow.className = 'jumper-row';
-  const chk = document.createElement('input');
-  chk.type = 'checkbox';
-  chk.className = 'jumper-chk';
-  chk.checked = mod[jumperKey];
-  chk.onchange = e => { mod[jumperKey] = e.target.checked; renderAll(); };
-  const jLbl = document.createElement('span');
-  jLbl.className = `jumper-lbl${mod[jumperKey] ? ' on' : ''}`;
-  jLbl.textContent = mod[jumperKey] ? '↗ JUMPER ON' : 'JUMPER OFF';
-  jRow.appendChild(chk); jRow.appendChild(jLbl);
-  group.appendChild(jRow);
-
+  const jumperKey=isPwr?'pwr2Jumpered':'eth2Jumpered';
+  const jRow=document.createElement('div'); jRow.className='jumper-row';
+  const chk=document.createElement('input'); chk.type='checkbox'; chk.className='jumper-chk';
+  chk.checked=mod[jumperKey];
+  chk.onchange=e=>{ mod[jumperKey]=e.target.checked; renderAll(); };
+  const jLbl=document.createElement('span'); jLbl.className=`jumper-lbl${mod[jumperKey]?' on':''}`;
+  jLbl.textContent=mod[jumperKey]?'↗ JUMPER ON':'JUMPER OFF';
+  jRow.appendChild(chk); jRow.appendChild(jLbl); group.appendChild(jRow);
   return group;
 }
 
 function buildIOPort(port) {
-  const cls = port.type === 'IO-Link' ? 't-iolink' : `t-${port.type.toLowerCase()}`;
-  const div = document.createElement('div');
-  div.className = `io-port ${cls}`;
+  const cls = port.type==='IO-Link'?'t-iolink':`t-${port.type.toLowerCase()}`;
+  const div = document.createElement('div'); div.className=`io-port ${cls}`;
 
-  const top = document.createElement('div');
-  top.className = 'port-top';
-  const num = document.createElement('span');
-  num.className = 'port-number';
-  num.textContent = `Port ${port.number}`;
-  const dot = document.createElement('div');
-  dot.className = 'status-dot';
-  top.appendChild(num); top.appendChild(dot);
-  div.appendChild(top);
+  const top=document.createElement('div'); top.className='port-top';
+  const num=document.createElement('span'); num.className='port-number'; num.textContent=`Port ${port.number}`;
+  const dot=document.createElement('div'); dot.className='status-dot';
+  top.appendChild(num); top.appendChild(dot); div.appendChild(top);
 
-  const typeSelect = document.createElement('select');
-  typeSelect.className = 'port-type-select';
-  PORT_TYPES.forEach(t => {
-    const opt = document.createElement('option');
-    opt.value = t; opt.textContent = t;
-    if (t === port.type) opt.selected = true;
-    typeSelect.appendChild(opt);
-  });
-  typeSelect.onchange = e => {
-    port.type = e.target.value;
-    if (port.type !== 'IO-Link') port.device = 'None';
-    renderAll();
-  };
+  const typeSelect=document.createElement('select'); typeSelect.className='port-type-select';
+  PORT_TYPES.forEach(t=>{ const o=document.createElement('option'); o.value=t; o.textContent=t; if(t===port.type)o.selected=true; typeSelect.appendChild(o); });
+  typeSelect.onchange=e=>{ port.type=e.target.value; if(port.type!=='IO-Link')port.device='None'; renderAll(); };
   div.appendChild(typeSelect);
 
-  if (port.type === 'IO-Link') {
-    const devRow = document.createElement('div');
-    devRow.className = 'device-row';
-    const iconDiv = document.createElement('div');
-    iconDiv.className = 'device-icon';
-    iconDiv.innerHTML = DEVICE_ICONS[port.device] || DEVICE_ICONS['None'];
-    const devSelect = document.createElement('select');
-    devSelect.className = 'port-device-select';
-    DEVICE_TYPES.forEach(d => {
-      const opt = document.createElement('option');
-      opt.value = d; opt.textContent = d === 'None' ? '— Device type' : d;
-      if (d === port.device) opt.selected = true;
-      devSelect.appendChild(opt);
-    });
-    devSelect.onchange = e => {
-      port.device = e.target.value;
-      iconDiv.innerHTML = DEVICE_ICONS[port.device] || DEVICE_ICONS['None'];
-    };
-    devRow.appendChild(iconDiv); devRow.appendChild(devSelect);
-    div.appendChild(devRow);
+  if (port.type==='IO-Link') {
+    const devRow=document.createElement('div'); devRow.className='device-row';
+    const iconDiv=document.createElement('div'); iconDiv.className='device-icon'; iconDiv.innerHTML=DEVICE_ICONS[port.device]||DEVICE_ICONS['None'];
+    const devSel=document.createElement('select'); devSel.className='port-device-select';
+    DEVICE_TYPES.forEach(d=>{ const o=document.createElement('option'); o.value=d; o.textContent=d==='None'?'— Device type':d; if(d===port.device)o.selected=true; devSel.appendChild(o); });
+    devSel.onchange=e=>{ port.device=e.target.value; iconDiv.innerHTML=DEVICE_ICONS[port.device]||DEVICE_ICONS['None']; };
+    devRow.appendChild(iconDiv); devRow.appendChild(devSel); div.appendChild(devRow);
   }
 
-  const nameInp = document.createElement('input');
-  nameInp.className = 'port-name-input';
-  nameInp.placeholder = port.type === 'IO-Link' ? 'Label device...' : 'Label port...';
-  nameInp.value = port.name;
-  nameInp.oninput = e => { port.name = e.target.value; };
+  const nameInp=document.createElement('input'); nameInp.className='port-name-input';
+  nameInp.placeholder=port.type==='IO-Link'?'Label device...':'Label port...';
+  nameInp.value=port.name; nameInp.oninput=e=>{ port.name=e.target.value; };
   div.appendChild(nameInp);
-
   return div;
 }
 
-/* ── ACTIONS ── */
-function addChainRow() {
-  chains.push(createChain());
+/* ── ZOOM MODAL ── */
+function findMod(id) {
+  for (const c of chains) { const m=c.modules.find(m=>m.id===id); if(m) return m; }
+  return null;
+}
+
+function openZoom(modId) {
+  zoomedModId = modId;
+  const mod = findMod(modId);
+  if (!mod) return;
+  renderZoomModal(mod);
+  document.getElementById('zoom-overlay').style.display='flex';
+  document.body.style.overflow='hidden';
+}
+
+function closeZoom() {
+  document.getElementById('zoom-overlay').style.display='none';
+  document.body.style.overflow='';
+  zoomedModId = null;
   renderAll();
 }
 
+function handleOverlayClick(e) {
+  if (e.target===document.getElementById('zoom-overlay')) closeZoom();
+}
+
+function renderZoomModal(mod) {
+  const modal = document.getElementById('zoom-modal');
+  modal.innerHTML='';
+
+  // Top bar accent line added via ::before pseudo — but we need an explicit div here
+  const accentBar=document.createElement('div');
+  accentBar.style.cssText=`height:2px;background:linear-gradient(90deg,${mod.status==='fault'?'var(--fault-color)':mod.status==='online'?'var(--online-color)':'var(--accent)'},transparent);position:sticky;top:0;z-index:5;`;
+  modal.appendChild(accentBar);
+
+  // Header
+  const hdr=document.createElement('div'); hdr.className='zoom-modal-header';
+  const title=document.createElement('span'); title.className='zoom-modal-title';
+  title.textContent=mod.name||`Module #${mod.id}`;
+  const closeBtn=document.createElement('button'); closeBtn.className='zoom-close'; closeBtn.textContent='✕ Close';
+  closeBtn.onclick=closeZoom;
+  hdr.appendChild(title); hdr.appendChild(closeBtn); modal.appendChild(hdr);
+
+  // Fault banner
+  const faultBanner=document.createElement('div');
+  faultBanner.className=`zoom-fault-banner${mod.status==='fault'?' visible':''}`;
+  const pulseDot=document.createElement('div'); pulseDot.className='fault-pulse';
+  faultBanner.appendChild(pulseDot);
+  faultBanner.appendChild(document.createTextNode('FAULT DETECTED — Module requires attention'));
+  modal.appendChild(faultBanner);
+
+  // Status row
+  const statusRow=document.createElement('div'); statusRow.className='zoom-status-row';
+  const sLbl=document.createElement('span'); sLbl.className='zoom-status-label'; sLbl.textContent='Status:';
+  statusRow.appendChild(sLbl);
+  [['online','● Online'],['offline','○ Offline'],['fault','⚠ Fault']].forEach(([s,lbl])=>{
+    const btn=document.createElement('button');
+    btn.className=`zoom-status-btn ${s}-btn${mod.status===s?' active':''}`;
+    btn.textContent=lbl;
+    btn.onclick=()=>{ mod.status=mod.status===s?'none':s; renderZoomModal(mod); renderAll(); };
+    statusRow.appendChild(btn);
+  });
+  modal.appendChild(statusRow);
+
+  // Info grid
+  const grid=document.createElement('div'); grid.className='zoom-info-grid';
+
+  const fields=[
+    ['Module Name','text',mod.name,v=>{mod.name=v;document.querySelector('.zoom-modal-title').textContent=v||`Module #${mod.id}`;}],
+    ['IP Address','text',mod.ip,v=>{mod.ip=v;},'192.168.1.___'],
+    ['PWR Cable In','text',mod.pwrCableLabel,v=>{mod.pwrCableLabel=v;},'Cable label…'],
+    ['ETH Cable In','text',mod.ethCableLabel,v=>{mod.ethCableLabel=v;},'Cable label…'],
+    ['Power Port 1 (IN)','text',mod.pwr1Name,v=>{mod.pwr1Name=v;}],
+    ['Power Port 2 (OUT)','text',mod.pwr2Name,v=>{mod.pwr2Name=v;}],
+    ['Ethernet Port 1 (IN)','text',mod.eth1Name,v=>{mod.eth1Name=v;}],
+    ['Ethernet Port 2 (OUT)','text',mod.eth2Name,v=>{mod.eth2Name=v;}],
+  ];
+
+  fields.forEach(([label,type,val,onchange,placeholder])=>{
+    const field=document.createElement('div'); field.className='zoom-field';
+    const lbl=document.createElement('label'); lbl.textContent=label;
+    const inp=document.createElement('input'); inp.type=type; inp.value=val||'';
+    if(placeholder) inp.placeholder=placeholder;
+    inp.oninput=e=>onchange(e.target.value);
+    field.appendChild(lbl); field.appendChild(inp); grid.appendChild(field);
+  });
+  modal.appendChild(grid);
+
+  // Jumper toggles
+  const jumperSection=document.createElement('div');
+  jumperSection.style.cssText='display:flex;gap:0;border-bottom:1px solid var(--border);';
+  [['pwr2Jumpered','⚡ Power Port 2 Jumpered','power'],['eth2Jumpered','⬡ Ethernet Port 2 Jumpered','eth']].forEach(([key,lbl,cls])=>{
+    const cell=document.createElement('div');
+    cell.style.cssText='flex:1;padding:8px 16px;border-right:1px solid var(--border);display:flex;align-items:center;gap:8px;';
+    const chk=document.createElement('input'); chk.type='checkbox'; chk.className='jumper-chk'; chk.checked=mod[key];
+    chk.onchange=e=>{ mod[key]=e.target.checked; renderAll(); };
+    const jlbl=document.createElement('span'); jlbl.style.cssText=`font-family:var(--mono);font-size:10px;color:${cls==='power'?'var(--power-color)':'var(--eth-color)'};text-transform:uppercase;letter-spacing:1px;`;
+    jlbl.textContent=lbl;
+    cell.appendChild(chk); cell.appendChild(jlbl); jumperSection.appendChild(cell);
+  });
+  jumperSection.lastChild.style.borderRight='none';
+  modal.appendChild(jumperSection);
+
+  // IO Ports in zoom
+  const portTitle=document.createElement('div'); portTitle.className='zoom-ports-title'; portTitle.textContent='IO-Link Ports';
+  modal.appendChild(portTitle);
+
+  const portsGrid=document.createElement('div'); portsGrid.className='zoom-ports-grid';
+  mod.ports.forEach(port=>{
+    const cls=port.type==='IO-Link'?'t-iolink':`t-${port.type.toLowerCase()}`;
+    const portDiv=document.createElement('div'); portDiv.className=`zoom-port ${cls}`;
+
+    const ph=document.createElement('div'); ph.className='zoom-port-header';
+    const pn=document.createElement('span'); pn.className='zoom-port-num'; pn.textContent=`Port ${port.number}`;
+    const pd=document.createElement('div'); pd.className='zoom-port-dot';
+    ph.appendChild(pn); ph.appendChild(pd); portDiv.appendChild(ph);
+
+    const tSel=document.createElement('select');
+    PORT_TYPES.forEach(t=>{ const o=document.createElement('option'); o.value=t; o.textContent=t; if(t===port.type)o.selected=true; tSel.appendChild(o); });
+    tSel.onchange=e=>{ port.type=e.target.value; if(port.type!=='IO-Link')port.device='None'; renderZoomModal(mod); renderAll(); };
+    portDiv.appendChild(tSel);
+
+    if (port.type==='IO-Link') {
+      const dRow=document.createElement('div'); dRow.className='zoom-port-device-row';
+      const icon=document.createElement('div'); icon.className='zoom-port-icon'; icon.innerHTML=DEVICE_ICONS[port.device]||DEVICE_ICONS['None'];
+      const dSel=document.createElement('select'); dSel.className='dev-select';
+      DEVICE_TYPES.forEach(d=>{ const o=document.createElement('option'); o.value=d; o.textContent=d==='None'?'— Device type':d; if(d===port.device)o.selected=true; dSel.appendChild(o); });
+      dSel.onchange=e=>{ port.device=e.target.value; icon.innerHTML=DEVICE_ICONS[port.device]||DEVICE_ICONS['None']; };
+      dRow.appendChild(icon); dRow.appendChild(dSel); portDiv.appendChild(dRow);
+    }
+
+    const nInp=document.createElement('input'); nInp.type='text';
+    nInp.placeholder=port.type==='IO-Link'?'Label device...':'Label port...';
+    nInp.value=port.name; nInp.oninput=e=>{ port.name=e.target.value; };
+    portDiv.appendChild(nInp);
+    portsGrid.appendChild(portDiv);
+  });
+  modal.appendChild(portsGrid);
+}
+
+/* ── SEARCH ── */
+function handleSearch(q) {
+  const clearBtn = document.getElementById('search-clear');
+  clearBtn.classList.toggle('visible', q.length>0);
+  applySearch(q.trim());
+}
+
+function clearSearch() {
+  document.getElementById('search-input').value='';
+  document.getElementById('search-clear').classList.remove('visible');
+  applySearch('');
+}
+
+function applySearch(q) {
+  const cards = document.querySelectorAll('.module-card');
+  if (!q) {
+    cards.forEach(c=>{ c.classList.remove('search-match','search-no-match'); });
+    document.querySelectorAll('.io-port').forEach(p=>p.classList.remove('search-match-port'));
+    return;
+  }
+  const ql = q.toLowerCase();
+
+  cards.forEach(card => {
+    const modId = parseInt(card.dataset.modId);
+    const mod = findMod(modId);
+    if (!mod) return;
+
+    // Check module-level fields
+    const modMatch =
+      mod.name.toLowerCase().includes(ql) ||
+      mod.ip.toLowerCase().includes(ql) ||
+      mod.pwrCableLabel.toLowerCase().includes(ql) ||
+      mod.ethCableLabel.toLowerCase().includes(ql) ||
+      mod.pwr1Name.toLowerCase().includes(ql) ||
+      mod.pwr2Name.toLowerCase().includes(ql) ||
+      mod.eth1Name.toLowerCase().includes(ql) ||
+      mod.eth2Name.toLowerCase().includes(ql);
+
+    // Check port-level fields
+    const portMatches = mod.ports.map(p =>
+      p.name.toLowerCase().includes(ql) ||
+      p.type.toLowerCase().includes(ql) ||
+      p.device.toLowerCase().includes(ql)
+    );
+    const anyPortMatch = portMatches.some(Boolean);
+    const isMatch = modMatch || anyPortMatch;
+
+    card.classList.toggle('search-match', isMatch);
+    card.classList.toggle('search-no-match', !isMatch);
+
+    // Highlight individual matching ports
+    const portEls = card.querySelectorAll('.io-port');
+    portEls.forEach((pel,i) => {
+      pel.classList.toggle('search-match-port', isMatch && portMatches[i]);
+    });
+  });
+}
+
+/* ── KEYBOARD ── */
+document.addEventListener('keydown', e => {
+  if (e.key==='Escape') {
+    if (zoomedModId!==null) closeZoom();
+    else clearSearch();
+  }
+});
+
+/* ── ACTIONS ── */
+function addChainRow() { chains.push(createChain()); renderAll(); }
+
 function renameBadge(id) {
-  const el = document.getElementById(id);
-  const n = prompt('Rename:', el.textContent);
-  if (n?.trim()) el.textContent = n.trim().toUpperCase();
+  const el=document.getElementById(id);
+  const n=prompt('Rename:',el.textContent);
+  if(n?.trim()) el.textContent=n.trim().toUpperCase();
+}
+
+function printDiagram() {
+  // Close zoom if open
+  if (zoomedModId!==null) closeZoom();
+  // Small delay to let modal close
+  setTimeout(()=>window.print(), 100);
 }
 
 function saveLayout() {
-  const data = {
+  const data={
     panelPwr: document.getElementById('panel-pwr').textContent,
     panelEth: document.getElementById('panel-eth').textContent,
     chains
   };
-  const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'iolink-layout.json';
-  a.click();
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='iolink-layout.json'; a.click();
 }
 
 function importLayout() {
-  const input = document.createElement('input');
-  input.type = 'file'; input.accept = '.json';
-  input.onchange = e => {
-    const reader = new FileReader();
-    reader.onload = evt => {
+  const input=document.createElement('input'); input.type='file'; input.accept='.json';
+  input.onchange=e=>{
+    const reader=new FileReader();
+    reader.onload=evt=>{
       try {
-        const data = JSON.parse(evt.target.result);
-        if (data.panelPwr) document.getElementById('panel-pwr').textContent = data.panelPwr;
-        if (data.panelEth) document.getElementById('panel-eth').textContent = data.panelEth;
-        chains = data.chains || data; // support old format
-        moduleIdCounter = Math.max(...chains.flatMap(c => c.modules.map(m => m.id)), 0);
+        const data=JSON.parse(evt.target.result);
+        if(data.panelPwr) document.getElementById('panel-pwr').textContent=data.panelPwr;
+        if(data.panelEth) document.getElementById('panel-eth').textContent=data.panelEth;
+        chains=data.chains||data;
+        // Ensure status field exists on import of old files
+        chains.forEach(c=>c.modules.forEach(m=>{ if(!m.status) m.status='none'; }));
+        moduleIdCounter=Math.max(...chains.flatMap(c=>c.modules.map(m=>m.id)),0);
         renderAll();
       } catch { alert('Invalid JSON file.'); }
     };
